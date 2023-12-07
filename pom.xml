@@ -29,7 +29,7 @@
     <name>Titanium RDF</name>
 
     <description>
-        RDF API &amp; Reader/Writer
+        RDF API &amp; Reader/Writer (formerly part of Titanium JSON-LD
     </description>
 
     <licenses>
