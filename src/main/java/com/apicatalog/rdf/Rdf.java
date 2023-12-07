@@ -28,6 +28,7 @@ import com.apicatalog.rdf.io.RdfWriter;
 import com.apicatalog.rdf.io.error.UnsupportedContentException;
 import com.apicatalog.rdf.lang.XsdConstants;
 import com.apicatalog.rdf.spi.RdfProvider;
+import com.apicatalog.rdf.uri.UriUtils;
 
 public final class Rdf {
 
@@ -125,11 +126,11 @@ public final class Rdf {
             throw new IllegalArgumentException();
         }
 
-        if (BlankNode.isWellFormed(value)) {
+        if (UriUtils.isBlanNode(value)) {
             return RdfProvider.provider().createBlankNode(value);
         }
 
-        if (UriUtils.isAbsoluteUri(value, true)) {
+        if (UriUtils.isAbsoluteUri(value)) {
             return RdfProvider.provider().createIRI(value);
         }
 
@@ -176,11 +177,11 @@ public final class Rdf {
             throw new IllegalArgumentException("The resource value cannot be null.");
         }
 
-        if (BlankNode.isWellFormed(resource)) {
+        if (UriUtils.isBlanNode(resource)) {
             return RdfProvider.provider().createBlankNode(resource);
         }
 
-        if (UriUtils.isAbsoluteUri(resource, true)) {
+        if (UriUtils.isAbsoluteUri(resource)) {
             return RdfProvider.provider().createIRI(resource);
         }
 

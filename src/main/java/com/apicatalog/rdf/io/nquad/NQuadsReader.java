@@ -28,6 +28,7 @@ import com.apicatalog.rdf.io.RdfReader;
 import com.apicatalog.rdf.io.error.RdfReaderException;
 import com.apicatalog.rdf.io.nquad.Tokenizer.Token;
 import com.apicatalog.rdf.io.nquad.Tokenizer.TokenType;
+import com.apicatalog.rdf.uri.UriUtils;
 
 /**
  *
@@ -241,7 +242,7 @@ public final class NQuadsReader implements RdfReader {
     }
 
     private static final void assertAbsoluteIri(final String iri, final String what) throws RdfReaderException {
-        if (UriUtils.isNotAbsoluteUri(iri)) {
+        if (!UriUtils.isAbsoluteUri(iri)) {
             throw new RdfReaderException(what + " must be an absolute IRI [" + iri  +  "]. ");
         }
     }    
