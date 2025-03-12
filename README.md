@@ -11,7 +11,6 @@ This is an initial attempt to separate RDF from Titanium JSON-LD. The primitives
 
 This repository should be deprecated and eventually deleted in favor of the separate artifacts.
 
-@larsw Thank you for starring this repo! I hope you find the separated repositories more convenient. Please feel free to open an issue, ask questions, or contribute!
 
 # Titanium RDF
 
