@@ -56,7 +56,7 @@ public class Quad extends Triple implements RdfQuad {
 
     @Override
     public int hashCode() {
-        return Objects.hash(subject, predicate, object, graphName);
+        return Objects.hash(RdfQuad.class, subject, predicate, object, graphName);
     }
 
     @Override

@@ -63,7 +63,7 @@ public class Literal implements RdfLiteral {
 
     @Override
     public int hashCode() {
-        return Objects.hash(lexicalValue, datatype, null, null);
+        return Objects.hash(RdfLiteral.class, lexicalValue, datatype, null, null);
     }
 
     @Override

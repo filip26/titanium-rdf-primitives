@@ -1,36 +1,37 @@
 package com.apicatalog.rdf.fnc;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Supplier;
 
+import com.apicatalog.rdf.RdfLiteral.Direction;
 import com.apicatalog.rdf.RdfQuad;
 import com.apicatalog.rdf.RdfResource;
 import com.apicatalog.rdf.RdfTerm;
+import com.apicatalog.rdf.RdfTermFactory;
 import com.apicatalog.rdf.api.RdfConsumerException;
 import com.apicatalog.rdf.api.RdfQuadConsumer;
-import com.apicatalog.rdf.primitive.LangString;
-import com.apicatalog.rdf.primitive.Literal;
-import com.apicatalog.rdf.primitive.Quad;
 import com.apicatalog.rdf.primitive.QuadHashDataset;
-import com.apicatalog.rdf.primitive.Resource;
+import com.apicatalog.rdf.primitive.TermFactory;
 
 public class QuadDatasetProvider implements RdfQuadConsumer, Supplier<QuadHashDataset> {
 
-    final Map<String, RdfResource> resources;
+    final RdfTermFactory terms;
     final QuadHashDataset dataset;
 
     public QuadDatasetProvider() {
-        this(QuadHashDataset.create(), new HashMap<>());
+        this(QuadHashDataset.create(), new TermFactory());
     }
 
-    public QuadDatasetProvider(QuadHashDataset dataset) {
-        this(dataset, new HashMap<>());
+    public QuadDatasetProvider(final QuadHashDataset dataset) {
+        this(dataset, new TermFactory());
     }
 
-    public QuadDatasetProvider(QuadHashDataset dataset, Map<String, RdfResource> resources) {
+    public QuadDatasetProvider(final RdfTermFactory terms) {
+        this(QuadHashDataset.create(), terms);
+    }
+
+    public QuadDatasetProvider(final QuadHashDataset dataset, final RdfTermFactory terms) {
         this.dataset = dataset;
-        this.resources = resources;
+        this.terms = terms;
     }
 
     @Override
@@ -42,10 +43,16 @@ public class QuadDatasetProvider implements RdfQuadConsumer, Supplier<QuadHashDa
     public RdfQuadConsumer quad(String subject, String predicate, String object, String datatype, String language, String direction, String graph) throws RdfConsumerException {
         final RdfTerm objectValue;
         if (language != null) {
-            objectValue = LangString.of(object, datatype, language, direction);
+            objectValue = terms.createLangString(
+                    object,
+                    datatype,
+                    language,
+                    direction != null
+                            ? Direction.valueOf(direction.toUpperCase())
+                            : null);
 
         } else if (datatype != null) {
-            objectValue = Literal.of(object, datatype);
+            objectValue = terms.createLiteral(object, datatype);
 
         } else {
             objectValue = getResource(object);
@@ -60,11 +67,11 @@ public class QuadDatasetProvider implements RdfQuadConsumer, Supplier<QuadHashDa
     }
 
     public void quad(RdfResource subject, RdfResource predicate, RdfTerm value, RdfResource graph) {
-        dataset.add(Quad.of(subject, predicate, value, graph));
+        dataset.add(terms.createQuad(subject, predicate, value, graph));
     }
 
-    public Map<String, RdfResource> resources() {
-        return resources;
+    public RdfTermFactory terms() {
+        return terms;
     }
 
     protected void quad(RdfQuad quad) {
@@ -72,8 +79,12 @@ public class QuadDatasetProvider implements RdfQuadConsumer, Supplier<QuadHashDa
     }
 
     protected final RdfResource getResource(final String name) {
-        return name != null
-                ? resources.computeIfAbsent(name, arg0 -> name.startsWith("_:") ? Resource.createBlankNode(name) : Resource.createIRI(name))
-                : null;
+        if (RdfQuadConsumer.isBlank(name)) {
+            return terms.createBlankNode(name);
+        }
+        return terms.createIRI(name);
+//        return name != null
+//                ? resources.computeIfAbsent(name, arg0 -> name.startsWith("_:") ? Resource.createBlankNode(name) : Resource.createIRI(name))
+//                : null;
     }
 }

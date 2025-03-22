@@ -60,7 +60,7 @@ public class LangString extends Literal implements RdfLiteral {
 
     @Override
     public int hashCode() {
-        return Objects.hash(lexicalValue, datatype, langTag, direction);
+        return Objects.hash(RdfLiteral.class, lexicalValue, datatype, langTag, direction);
     }
 
     @Override

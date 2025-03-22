@@ -17,6 +17,7 @@ package com.apicatalog.rdf.primitive;
 
 import java.util.Objects;
 
+import com.apicatalog.rdf.RdfQuad;
 import com.apicatalog.rdf.RdfResource;
 import com.apicatalog.rdf.RdfTerm;
 import com.apicatalog.rdf.RdfTriple;
@@ -60,7 +61,7 @@ public class Triple implements RdfTriple {
 
     @Override
     public int hashCode() {
-        return Objects.hash(subject, predicate, object, null);
+        return Objects.hash(RdfQuad.class, subject, predicate, object, null);
     }
 
     @Override
