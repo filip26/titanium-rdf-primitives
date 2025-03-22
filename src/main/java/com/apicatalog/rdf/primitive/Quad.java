@@ -42,13 +42,10 @@ public class Quad extends Triple implements RdfQuad {
 
     @Override
     public String toString() {
-        final StringBuilder builder = new StringBuilder()
-                .append(subject)
-                .append(' ')
-                .append(predicate)
-                .append(' ')
-                .append(object)
-                .append(' ');
+        
+        final StringBuilder builder = new StringBuilder();
+                
+        printTriple(builder, subject, predicate, object).append(' ');
 
         if (graphName != null) {
             builder.append(graphName).append(' ');
@@ -59,10 +56,7 @@ public class Quad extends Triple implements RdfQuad {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + Objects.hash(graphName);
-        return result;
+        return Objects.hash(subject, predicate, object, graphName);
     }
 
     @Override
@@ -78,7 +72,7 @@ public class Quad extends Triple implements RdfQuad {
             return Objects.equals(graphName, other.graphName);
         }
         if (!(obj instanceof RdfQuad)) {
-            return false;
+            return graphName == null;
         }
         RdfQuad other = (RdfQuad) obj;
         return Objects.equals(graphName, other.graphName().orElse(null));

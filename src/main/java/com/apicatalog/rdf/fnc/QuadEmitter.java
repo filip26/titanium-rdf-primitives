@@ -56,14 +56,14 @@ public class QuadEmitter {
             return;
         }
 
-        if (quad.object().isTripleTerm()) {
+        if (quad.object().isTriple()) {
             throw new IllegalArgumentException("RDF triple terms are not supported, yet [" + quad + "].");
         }
 
-        throw new IllegalStateException("Unknown object [" + quad + "].");
+        throw new IllegalStateException("An unknown object [" + quad + "].");
     }
 
-    protected static final String resource(final RdfResource resource) {
+    static final String resource(final RdfResource resource) {
 
         final String value = resource.value();
 

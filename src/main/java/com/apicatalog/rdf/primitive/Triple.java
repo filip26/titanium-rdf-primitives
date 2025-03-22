@@ -34,7 +34,7 @@ public class Triple implements RdfTriple {
         this.predicate = predicate;
         this.object = object;
     }
-    
+
     @Override
     public RdfResource subject() {
         return subject;
@@ -52,12 +52,7 @@ public class Triple implements RdfTriple {
 
     @Override
     public String toString() {
-        return new StringBuilder()
-                .append(subject)
-                .append(' ')
-                .append(predicate)
-                .append(' ')
-                .append(object)
+        return printTriple(new StringBuilder(), subject, predicate, object)
                 .append(' ')
                 .append('.')
                 .toString();
@@ -65,7 +60,7 @@ public class Triple implements RdfTriple {
 
     @Override
     public int hashCode() {
-        return Objects.hash(object, predicate, subject);
+        return Objects.hash(subject, predicate, object, null);
     }
 
     @Override
@@ -87,8 +82,29 @@ public class Triple implements RdfTriple {
         }
         RdfTriple other = (RdfTriple) obj;
         return Objects.equals(subject, other.subject())
-                && Objects.equals(object, other.object())
-                && Objects.equals(predicate, other.predicate());
+                && Objects.equals(predicate, other.predicate())
+                && Objects.equals(object, other.object());
     }
 
+    static final StringBuilder printTriple(StringBuilder builder, RdfResource subject, RdfResource predicate, RdfTerm object) {
+        builder.append(subject)
+                .append(' ')
+                .append(predicate)
+                .append(' ');
+
+        if (object.isTriple()) {
+            return printTripleTerm(builder, object.asTriple());
+        }
+
+        return builder.append(object);
+    }
+
+    static final StringBuilder printTripleTerm(StringBuilder builder, RdfTriple triple) {
+        builder.append("<<( ");
+        return printTriple(builder,
+                triple.subject(),
+                triple.predicate(),
+                triple.object())
+                .append(" )>>");
+    }
 }

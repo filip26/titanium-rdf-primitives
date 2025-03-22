@@ -18,7 +18,7 @@ package com.apicatalog.rdf;
 /**
  * The {@link RdfTriple} interface describes an immutable RDF triple.
  */
-public interface RdfTriple {
+public interface RdfTriple extends RdfTerm {
 
     /**
      * An absolute IRI or blank node identifier denoting the subject of the triple.
@@ -42,4 +42,14 @@ public interface RdfTriple {
      * @return {@link RdfTerm}
      */
     RdfTerm object();
+    
+    @Override
+    default boolean isTriple() {
+        return true;
+    }
+
+    @Override
+    default RdfTriple asTriple() {
+        return this;
+    }
 }

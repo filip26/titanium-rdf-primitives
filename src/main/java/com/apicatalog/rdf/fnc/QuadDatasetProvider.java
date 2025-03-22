@@ -2,7 +2,6 @@ package com.apicatalog.rdf.fnc;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import com.apicatalog.rdf.RdfQuad;
@@ -16,7 +15,7 @@ import com.apicatalog.rdf.primitive.Quad;
 import com.apicatalog.rdf.primitive.QuadHashDataset;
 import com.apicatalog.rdf.primitive.Resource;
 
-public class QuadDatasetProvider implements RdfQuadConsumer, Supplier<QuadHashDataset>, Consumer<RdfQuad> {
+public class QuadDatasetProvider implements RdfQuadConsumer, Supplier<QuadHashDataset> {
 
     final Map<String, RdfResource> resources;
     final QuadHashDataset dataset;
@@ -37,11 +36,6 @@ public class QuadDatasetProvider implements RdfQuadConsumer, Supplier<QuadHashDa
     @Override
     public QuadHashDataset get() {
         return dataset;
-    }
-
-    @Override
-    public void accept(RdfQuad quad) {
-        dataset.add(quad);
     }
 
     @Override
@@ -66,11 +60,15 @@ public class QuadDatasetProvider implements RdfQuadConsumer, Supplier<QuadHashDa
     }
 
     public void quad(RdfResource subject, RdfResource predicate, RdfTerm value, RdfResource graph) {
-        accept(Quad.of(subject, predicate, value, graph));
+        dataset.add(Quad.of(subject, predicate, value, graph));
     }
 
     public Map<String, RdfResource> resources() {
         return resources;
+    }
+
+    protected void quad(RdfQuad quad) {
+        dataset.add(quad);
     }
 
     protected final RdfResource getResource(final String name) {

@@ -54,7 +54,7 @@ public class Resource implements RdfResource {
 
     @Override
     public int hashCode() {
-        return Objects.hash(value);
+        return Objects.hash(value, blankNode);
     }
 
     @Override

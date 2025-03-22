@@ -23,4 +23,5 @@ import java.util.Optional;
 public interface RdfQuad extends RdfTriple {
 
     Optional<RdfResource> graphName();
+    
 }

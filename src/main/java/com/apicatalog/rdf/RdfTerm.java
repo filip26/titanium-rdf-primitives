@@ -57,7 +57,7 @@ public interface RdfTerm {
      * 
      * @return <code>true</code> is the term value is a triple term
      */
-    default boolean isTripleTerm() {
+    default boolean isTriple() {
         return false;
     }
 
