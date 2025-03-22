@@ -16,17 +16,21 @@
 package com.apicatalog.rdf;
 
 /**
- * An immutable RDF statement's value. Represents an absolute IRI or blank node identifier.
+ * An RDF statement's value. Represents an absolute IRI or blank node
+ * identifier.
  */
-public interface RdfResource extends RdfValue {
+public interface RdfResource extends RdfTerm {
+
+    String value();
 
     @Override
-    default boolean isLiteral() {
-        return false;
-    }
+    boolean isBlankNode();
 
     @Override
-    default RdfLiteral asLiteral() {
-        throw new ClassCastException();
+    boolean isIRI();
+
+    @Override
+    default RdfResource asResource() {
+        return this;
     }
 }

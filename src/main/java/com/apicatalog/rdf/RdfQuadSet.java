@@ -15,18 +15,18 @@
  */
 package com.apicatalog.rdf;
 
-import java.util.Optional;
-import java.util.Set;
+import java.util.stream.Stream;
 
-public interface RdfDataset {
+public interface RdfQuadSet {
 
-    RdfGraph defaultGraph();
+    boolean contains(RdfQuad quad);
 
-    Set<RdfResource> graphNames();
+    Stream<RdfQuad> stream();
 
-    Optional<RdfGraph> namedGraph(RdfResource graphName);
-
-    default RdfDataset defaultGraph(RdfGraph graph) {
-        throw new UnsupportedOperationException();
-    }
+    /**
+     * Get the size of the dataset.
+     *
+     * @return total number of quads in the dataset across all graphs
+     */
+    int size();
 }

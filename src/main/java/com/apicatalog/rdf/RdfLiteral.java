@@ -18,33 +18,41 @@ package com.apicatalog.rdf;
 import java.util.Optional;
 
 /**
- * The {@link RdfLiteral} interface describes an immutable <code>RDF Literal</code>.
+ * The {@link RdfLiteral} interface describes an immutable
+ * <code>RDF Literal</code>.
  */
-public interface RdfLiteral extends RdfValue {
+public interface RdfLiteral extends RdfTerm {
+
+    public enum Direction {
+        LTR,
+        RTL,
+    }
 
     /**
      * Get the lexical value of the literal.
      *
      * @return lexical value, never <code>null</code>
      */
-    @Override
-    String getValue();
+    String lexicalValue();
 
     /**
      * An absolute IRI denoting the datatype IRI of the literal. If the value is
-     * rdf:langString, {@link #getLanguage()} value is present.
+     * rdf:langString, {@link #language()} value is present.
      *
      * @return an absolute IRI, never <code>null</code>
      */
-    String getDatatype();
+    String datatype();
 
     /**
-     * An optional language tag. If this value is specified, {@link #getDatatype()} returns rdf:langString.
+     * An optional language tag. If this value is specified, {@link #datatype()}
+     * returns rdf:langString.
      *
      * @return language tag or {@link Optional#empty()} if not set
      */
-    Optional<String> getLanguage();
+    Optional<String> language();
 
+    Optional<Direction> direction();
+    
     @Override
     default boolean isIRI() {
         return false;

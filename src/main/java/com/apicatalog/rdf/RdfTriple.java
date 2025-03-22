@@ -25,21 +25,21 @@ public interface RdfTriple {
      *
      * @return an absolute URI or blank node
      */
-    RdfResource getSubject();
+    RdfResource subject();
 
     /**
-     * An absolute IRI or blank node identifier denoting the predicate of the triple.
+     * An absolute IRI or blank node identifier denoting the predicate of the
+     * triple.
      *
      * @return an absolute URI or blank node
      */
-    RdfResource getPredicate();
-
+    RdfResource predicate();
 
     /**
-     * An absolute IRI or blank node identifier or {@link RdfLiteral}.
+     * An absolute IRI or blank node identifier, {@link RdfLiteral}, or
+     * {@link RdfTripleTerm} (RDF1.2).
      *
-     * @return {@link RdfValue}
+     * @return {@link RdfTerm}
      */
-    RdfValue getObject();
-
+    RdfTerm object();
 }

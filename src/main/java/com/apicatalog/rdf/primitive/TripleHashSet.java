@@ -13,20 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.apicatalog.rdf;
+package com.apicatalog.rdf.primitive;
 
-import java.util.Optional;
-import java.util.Set;
+import java.util.HashSet;
+import java.util.stream.Stream;
 
-public interface RdfDataset {
+import com.apicatalog.rdf.RdfGraph;
+import com.apicatalog.rdf.RdfTriple;
 
-    RdfGraph defaultGraph();
+public final class TripleHashSet extends HashSet<RdfTriple> implements RdfGraph {
 
-    Set<RdfResource> graphNames();
+    private static final long serialVersionUID = 3719269032259156466L;
 
-    Optional<RdfGraph> namedGraph(RdfResource graphName);
-
-    default RdfDataset defaultGraph(RdfGraph graph) {
-        throw new UnsupportedOperationException();
+    @Override
+    public Stream<RdfTriple> stream() {
+        return super.stream();
     }
+
+    @Override
+    public boolean contains(RdfTriple triple) {
+        return super.contains(triple);
+    }
+
 }

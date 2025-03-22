@@ -15,18 +15,19 @@
  */
 package com.apicatalog.rdf;
 
-import java.util.Optional;
-import java.util.Set;
+/**
+ * The {@link RdfTripleTerm} interface describes an RDF Triple Term introduced in RDF 1.2.
+ * 
+ */
+public interface RdfTripleTerm extends RdfTriple, RdfTerm {
 
-public interface RdfDataset {
+    @Override
+    default boolean isTripleTerm() {
+        return true;
+    }
 
-    RdfGraph defaultGraph();
-
-    Set<RdfResource> graphNames();
-
-    Optional<RdfGraph> namedGraph(RdfResource graphName);
-
-    default RdfDataset defaultGraph(RdfGraph graph) {
-        throw new UnsupportedOperationException();
+    @Override
+    default RdfTriple asTriple() {
+        return this;
     }
 }

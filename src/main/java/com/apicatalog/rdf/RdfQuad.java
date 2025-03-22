@@ -16,17 +16,11 @@
 package com.apicatalog.rdf;
 
 import java.util.Optional;
-import java.util.Set;
 
-public interface RdfDataset {
+/**
+ * Represents an immutable N-Quad statement.
+ */
+public interface RdfQuad extends RdfTriple {
 
-    RdfGraph defaultGraph();
-
-    Set<RdfResource> graphNames();
-
-    Optional<RdfGraph> namedGraph(RdfResource graphName);
-
-    default RdfDataset defaultGraph(RdfGraph graph) {
-        throw new UnsupportedOperationException();
-    }
+    Optional<RdfResource> graphName();
 }
