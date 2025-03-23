@@ -1,9 +1,12 @@
 package com.apicatalog.rdf.fnc;
 
+import java.util.Optional;
+
 import com.apicatalog.rdf.RdfLiteral;
 import com.apicatalog.rdf.RdfLiteral.Direction;
 import com.apicatalog.rdf.RdfQuad;
 import com.apicatalog.rdf.RdfResource;
+import com.apicatalog.rdf.RdfTerm;
 import com.apicatalog.rdf.api.RdfConsumerException;
 import com.apicatalog.rdf.api.RdfQuadConsumer;
 
@@ -21,14 +24,22 @@ public class QuadEmitter {
     }
 
     public static void emit(RdfQuadConsumer consumer, RdfQuad quad) throws RdfConsumerException {
+        emit(consumer,
+                quad.subject(),
+                quad.predicate(),
+                quad.object(),
+                quad.graphName().orElse(null));
+    }
 
-        if (quad.object().isLiteral()) {
+    public static void emit(RdfQuadConsumer consumer, RdfResource subject, RdfResource predicate, RdfTerm object, RdfResource graph) throws RdfConsumerException {
 
-            final RdfLiteral literal = quad.object().asLiteral();
+        if (object.isLiteral()) {
+
+            final RdfLiteral literal = object.asLiteral();
 
             consumer.quad(
-                    resource(quad.subject()),
-                    resource(quad.predicate()),
+                    resource(subject),
+                    resource(predicate),
                     literal.lexicalValue(),
                     literal.datatype(),
                     literal.language().orElse(null),
@@ -36,31 +47,31 @@ public class QuadEmitter {
                             .map(Direction::name)
                             .map(String::toLowerCase)
                             .orElse(null),
-                    quad.graphName()
+                    Optional.ofNullable(graph)
                             .map(RdfResource::value)
                             .orElse(null));
             return;
         }
 
-        if (quad.object().isIRI() || quad.object().isBlankNode()) {
+        if (object.isIRI() || object.isBlankNode()) {
             consumer.quad(
-                    resource(quad.subject()),
-                    resource(quad.predicate()),
-                    resource(quad.object().asResource()),
+                    resource(subject),
+                    resource(predicate),
+                    resource(object.asResource()),
                     null,
                     null,
                     null,
-                    quad.graphName()
+                    Optional.ofNullable(graph)
                             .map(RdfResource::value)
                             .orElse(null));
             return;
         }
 
-        if (quad.object().isTriple()) {
-            throw new IllegalArgumentException("RDF triple terms are not supported, yet [" + quad + "].");
+        if (object.isTriple()) {
+            throw new IllegalArgumentException("RDF triple terms are not supported, yet [" + subject + " " + predicate + " " + object + " " + graph + "].");
         }
 
-        throw new IllegalStateException("An unknown object [" + quad + "].");
+        throw new IllegalStateException("An unknown object [" + subject + " " + predicate + " " + object + " " + graph + "].");
     }
 
     static final String resource(final RdfResource resource) {

@@ -42,9 +42,9 @@ public class Quad extends Triple implements RdfQuad {
 
     @Override
     public String toString() {
-        
+
         final StringBuilder builder = new StringBuilder();
-                
+
         printTriple(builder, subject, predicate, object).append(' ');
 
         if (graphName != null) {
@@ -56,7 +56,7 @@ public class Quad extends Triple implements RdfQuad {
 
     @Override
     public int hashCode() {
-        return Objects.hash(RdfQuad.class, subject, predicate, object, graphName);
+        return Objects.hash(subject, predicate, object, graphName);
     }
 
     @Override

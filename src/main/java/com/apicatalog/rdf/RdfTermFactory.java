@@ -4,7 +4,6 @@ import com.apicatalog.rdf.RdfLiteral.Direction;
 
 public interface RdfTermFactory {
 
-    
     RdfResource createBlankNode(String value);
     
     RdfResource createIRI(String value);

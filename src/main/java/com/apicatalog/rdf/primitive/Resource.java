@@ -23,18 +23,28 @@ public class Resource implements RdfResource {
 
     final String value;
     final boolean blankNode;
+    String key;
 
-    Resource(final String value, boolean isBlankNode) {
+    Resource(final String value, boolean isBlankNode, String key) {
         this.value = value;
         this.blankNode = isBlankNode;
+        this.key = key;
     }
 
     public static Resource createBlankNode(String value) {
-        return new Resource(value, true);
+        return createBlankNode(value, null);
+    }
+
+    static Resource createBlankNode(String value, String key) {
+        return new Resource(value, true, key);
     }
 
     public static Resource createIRI(String value) {
-        return new Resource(value, false);
+        return createIRI(value, null);
+    }
+
+    static Resource createIRI(String value, String key) {
+        return new Resource(value, false, key);
     }
 
     @Override
@@ -54,7 +64,7 @@ public class Resource implements RdfResource {
 
     @Override
     public int hashCode() {
-        return Objects.hash(RdfResource.class, value, blankNode);
+        return Objects.hash(value, blankNode);
     }
 
     @Override
@@ -80,9 +90,15 @@ public class Resource implements RdfResource {
 
     @Override
     public String toString() {
-        if (blankNode) {
-            return Objects.toString(value);
+        if (key == null) {
+            key = key(value, blankNode); 
         }
-        return '<' + Objects.toString(value) + '>';
+        return key;
+    }
+    
+    static final String key(String value, boolean blankNode) {
+        return blankNode
+                ? Objects.toString(value)
+                : '<' + Objects.toString(value) + '>';
     }
 }

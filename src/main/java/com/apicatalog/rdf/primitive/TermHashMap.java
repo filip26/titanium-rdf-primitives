@@ -1,5 +1,7 @@
 package com.apicatalog.rdf.primitive;
 
+import java.util.HashMap;
+
 import com.apicatalog.rdf.RdfLiteral;
 import com.apicatalog.rdf.RdfLiteral.Direction;
 import com.apicatalog.rdf.RdfQuad;
@@ -8,49 +10,47 @@ import com.apicatalog.rdf.RdfTerm;
 import com.apicatalog.rdf.RdfTermFactory;
 import com.apicatalog.rdf.RdfTriple;
 
-public class TermFactory implements RdfTermFactory {
+public class TermHashMap extends HashMap<String, RdfTerm> implements RdfTermFactory {
 
-    
-    public TermFactory() {
-        // TODO Auto-generated constructor stub
-    }
+    private static final long serialVersionUID = 560481899503078382L;
 
     @Override
     public RdfResource createBlankNode(String value) {
-        // TODO Auto-generated method stub
-        return null;
+        return (RdfResource) super.computeIfAbsent(
+                Resource.key(value, true),
+                key -> Resource.createBlankNode(value, key));
     }
 
     @Override
     public RdfResource createIRI(String value) {
-        // TODO Auto-generated method stub
-        return null;
+        return (RdfResource) super.computeIfAbsent(
+                Resource.key(value, false),
+                key -> Resource.createIRI(value, key));
     }
 
     @Override
     public RdfTriple createTriple(RdfResource subject, RdfResource predicate, RdfTerm object) {
         // TODO Auto-generated method stub
         return null;
+
     }
 
     @Override
     public RdfQuad createQuad(RdfResource subject, RdfResource predicate, RdfTerm object, RdfResource graph) {
-        // TODO Auto-generated method stub
-        return null;
+        return Quad.of(subject, predicate, object, graph);
     }
 
     @Override
     public RdfLiteral createLiteral(String lexicalValue, String datatype) {
-        // TODO Auto-generated method stub
-        return null;
+        return (RdfLiteral) super.computeIfAbsent(
+                Literal.key(lexicalValue, datatype, null, null),
+                key -> Literal.of(lexicalValue, datatype, key));
     }
 
     @Override
     public RdfLiteral createLangString(String lexicalValue, String datatype, String langTag, Direction direction) {
-        // TODO Auto-generated method stub
-        return null;
+        return (RdfLiteral) super.computeIfAbsent(
+                Literal.key(lexicalValue, datatype, langTag, direction),
+                key -> LangString.of(lexicalValue, datatype, langTag, direction, key));
     }
-    
-    
-    
 }

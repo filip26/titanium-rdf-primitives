@@ -19,7 +19,6 @@ import java.util.Objects;
 import java.util.Optional;
 
 import com.apicatalog.rdf.RdfLiteral;
-import com.apicatalog.rdf.nquads.NQuadsWriter;
 
 public class LangString extends Literal implements RdfLiteral {
 
@@ -27,8 +26,8 @@ public class LangString extends Literal implements RdfLiteral {
 
     final Direction direction;
 
-    LangString(String lexicalValue, String datatype, String langTag, Direction direction) {
-        super(lexicalValue, datatype);
+    LangString(String lexicalValue, String datatype, String langTag, Direction direction, String key) {
+        super(lexicalValue, datatype, key);
         this.langTag = langTag;
         this.direction = direction;
     }
@@ -39,13 +38,17 @@ public class LangString extends Literal implements RdfLiteral {
 
     public static LangString of(String lexicalValue, String datatype, String langTag, String direction) {
         if (direction != null) {
-            return new LangString(lexicalValue, datatype, langTag, Direction.valueOf(direction.toUpperCase()));
+            return new LangString(lexicalValue, datatype, langTag, Direction.valueOf(direction.toUpperCase()), null);
         }
-        return of(lexicalValue, datatype, langTag, (Direction) null);
+        return of(lexicalValue, datatype, langTag, (Direction) null, null);
     }
 
     public static LangString of(String lexicalValue, String datatype, String langTag, Direction direction) {
-        return new LangString(lexicalValue, datatype, langTag, direction);
+        return new LangString(lexicalValue, datatype, langTag, direction, null);
+    }
+
+    static LangString of(String lexicalValue, String datatype, String langTag, Direction direction, String key) {
+        return new LangString(lexicalValue, datatype, langTag, direction, key);
     }
 
     @Override
@@ -60,7 +63,7 @@ public class LangString extends Literal implements RdfLiteral {
 
     @Override
     public int hashCode() {
-        return Objects.hash(RdfLiteral.class, lexicalValue, datatype, langTag, direction);
+        return Objects.hash(lexicalValue, datatype, langTag, direction);
     }
 
     @Override
@@ -90,12 +93,9 @@ public class LangString extends Literal implements RdfLiteral {
 
     @Override
     public String toString() {
-        return NQuadsWriter.literal(
-                lexicalValue,
-                datatype,
-                langTag,
-                direction != null
-                        ? direction.name().toLowerCase()
-                        : null);
+        if (key == null) {
+            key = key(lexicalValue, datatype, langTag, direction);
+        }
+        return key;
     }
 }

@@ -9,33 +9,33 @@ import com.apicatalog.rdf.RdfTerm;
 import com.apicatalog.rdf.RdfTermFactory;
 import com.apicatalog.rdf.api.RdfConsumerException;
 import com.apicatalog.rdf.api.RdfQuadConsumer;
-import com.apicatalog.rdf.primitive.QuadHashDataset;
-import com.apicatalog.rdf.primitive.TermFactory;
+import com.apicatalog.rdf.container.QuadDataHashSet;
+import com.apicatalog.rdf.primitive.TermHashMap;
 
-public class QuadDatasetProvider implements RdfQuadConsumer, Supplier<QuadHashDataset> {
+public class QuadDatasetProvider implements RdfQuadConsumer, Supplier<QuadDataHashSet> {
 
     final RdfTermFactory terms;
-    final QuadHashDataset dataset;
+    final QuadDataHashSet dataset;
 
     public QuadDatasetProvider() {
-        this(QuadHashDataset.create(), new TermFactory());
+        this(QuadDataHashSet.create(), new TermHashMap());
     }
 
-    public QuadDatasetProvider(final QuadHashDataset dataset) {
-        this(dataset, new TermFactory());
+    public QuadDatasetProvider(final QuadDataHashSet dataset) {
+        this(dataset, new TermHashMap());
     }
 
     public QuadDatasetProvider(final RdfTermFactory terms) {
-        this(QuadHashDataset.create(), terms);
+        this(QuadDataHashSet.create(), terms);
     }
 
-    public QuadDatasetProvider(final QuadHashDataset dataset, final RdfTermFactory terms) {
+    public QuadDatasetProvider(final QuadDataHashSet dataset, final RdfTermFactory terms) {
         this.dataset = dataset;
         this.terms = terms;
     }
 
     @Override
-    public QuadHashDataset get() {
+    public QuadDataHashSet get() {
         return dataset;
     }
 
@@ -83,8 +83,5 @@ public class QuadDatasetProvider implements RdfQuadConsumer, Supplier<QuadHashDa
             return terms.createBlankNode(name);
         }
         return terms.createIRI(name);
-//        return name != null
-//                ? resources.computeIfAbsent(name, arg0 -> name.startsWith("_:") ? Resource.createBlankNode(name) : Resource.createIRI(name))
-//                : null;
     }
 }

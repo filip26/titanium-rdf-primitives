@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.apicatalog.rdf.primitive;
+package com.apicatalog.rdf.container;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -28,23 +29,22 @@ import com.apicatalog.rdf.RdfQuad;
 import com.apicatalog.rdf.RdfQuadSet;
 import com.apicatalog.rdf.RdfResource;
 
-public class QuadHashDataset implements RdfDataset, RdfQuadSet {
+public final class QuadDataHashSet extends HashSet<RdfQuad> implements RdfDataset, RdfQuadSet {
+
+    private static final long serialVersionUID = -1555324500576292374L;
 
     final TripleHashSet defaultGraph;
+
     /** named graphs index */
     final Map<RdfResource, TripleHashSet> graphs;
-    /** all quads index */
-    final Set<RdfQuad> quads;
 
-
-    QuadHashDataset() {
+    QuadDataHashSet() {
         this.graphs = new HashMap<>();
-        this.quads = new HashSet<>();
         this.defaultGraph = new TripleHashSet();
     }
-    
-    public static QuadHashDataset create() {
-        return new QuadHashDataset();
+
+    public static QuadDataHashSet create() {
+        return new QuadDataHashSet();
     }
 
     @Override
@@ -52,7 +52,8 @@ public class QuadHashDataset implements RdfDataset, RdfQuadSet {
         return defaultGraph;
     }
 
-    public RdfDataset add(final RdfQuad nquad) {
+    @Override
+    public boolean add(final RdfQuad nquad) {
 
         if (nquad == null) {
             throw new IllegalArgumentException();
@@ -69,12 +70,12 @@ public class QuadHashDataset implements RdfDataset, RdfQuadSet {
                 graph = new TripleHashSet();
                 graphs.put(graphName.get(), graph);
                 graph.add(nquad);
-                quads.add(nquad);
+                return super.add(nquad);
 
             } else if (!graph.contains(nquad)) {
 
                 graph.add(nquad);
-                quads.add(nquad);
+                return super.add(nquad);
             }
 
         } else {
@@ -82,10 +83,10 @@ public class QuadHashDataset implements RdfDataset, RdfQuadSet {
             // add to default graph
             if (!defaultGraph.contains(nquad)) {
                 defaultGraph.add(nquad);
-                quads.add(nquad);
+                return super.add(nquad);
             }
         }
-        return this;
+        return false;
     }
 
     @Override
@@ -99,45 +100,46 @@ public class QuadHashDataset implements RdfDataset, RdfQuadSet {
     }
 
     @Override
-    public int size() {
-        return quads.size();
-    }
-
-//    @Override
-//    public RdfDataset add(RdfTriple triple) {
-//
-//        RdfQuad nquad = new Quad(triple.subject(), triple.predicate(), triple.object(), null);
-//
-//        if (!defaultGraph.contains(nquad)) {
-//            defaultGraph.add(nquad);
-//            quads.add(nquad);
-//        }
-//
-//        return this;
-//    }
-//    
-//    /**
-//     * Add Quad to the dataset.
-//     *
-//     * @param quad to add
-//     * @return the same {@link RdfQuadSet} instance
-//     */
-//    public RdfQuadSet add(RdfQuad quad) {
-//        throw new UnsupportedOperationException();
-//    }
-
-    public RdfQuadSet remove(RdfQuad quad) {
-        quads.remove(quad);
-        return this;
-    }
-
-    @Override
     public boolean contains(RdfQuad quad) {
-        return quads.contains(quad);
+        return super.contains(quad);
     }
 
     @Override
     public Stream<RdfQuad> stream() {
-        return quads.stream();
+        return super.stream();
+    }
+
+    @Override
+    public Iterator<RdfQuad> iterator() {
+
+        Iterator<RdfQuad> it = super.iterator();
+
+        return new Iterator<RdfQuad>() {
+
+            RdfQuad last = null;
+
+            @Override
+            public RdfQuad next() {
+                this.last = it.next();
+                return last;
+            }
+
+            @Override
+            public boolean hasNext() {
+                return it.hasNext();
+            }
+
+            @Override
+            public void remove() {
+                if (last.graphName().isPresent()) {
+                    graphs.get(last.graphName().get()).remove(last);
+
+                } else {
+                    defaultGraph.remove(last);
+                }
+
+                it.remove();
+            }
+        };
     }
 }
