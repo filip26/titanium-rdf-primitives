@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 
 import com.apicatalog.rdf.RdfLiteral.Direction;
 import com.apicatalog.rdf.RdfQuad;
+import com.apicatalog.rdf.RdfQuadSet;
 import com.apicatalog.rdf.RdfResource;
 import com.apicatalog.rdf.RdfTerm;
 import com.apicatalog.rdf.RdfTermFactory;
@@ -13,31 +14,31 @@ import com.apicatalog.rdf.api.RdfQuadConsumer;
 import com.apicatalog.rdf.container.QuadDataHashSet;
 import com.apicatalog.rdf.primitive.TermHashMap;
 
-public class QuadDatasetProvider implements RdfQuadConsumer, Supplier<QuadDataHashSet> {
+public class QuadSetProvider implements RdfQuadConsumer, Supplier<RdfQuadSet> {
 
     final RdfTermFactory terms;
-    final QuadDataHashSet dataset;
+    final RdfQuadSet quadSet;
 
-    public QuadDatasetProvider() {
+    public QuadSetProvider() {
         this(QuadDataHashSet.create(), new TermHashMap());
     }
 
-    public QuadDatasetProvider(final QuadDataHashSet dataset) {
-        this(dataset, new TermHashMap());
+    public QuadSetProvider(final RdfQuadSet quadSet) {
+        this(quadSet, new TermHashMap());
     }
 
-    public QuadDatasetProvider(final RdfTermFactory terms) {
+    public QuadSetProvider(final RdfTermFactory terms) {
         this(QuadDataHashSet.create(), terms);
     }
 
-    public QuadDatasetProvider(final QuadDataHashSet dataset, final RdfTermFactory terms) {
-        this.dataset = dataset;
+    public QuadSetProvider(final RdfQuadSet quadSet, final RdfTermFactory terms) {
+        this.quadSet = quadSet;
         this.terms = terms;
     }
 
     @Override
-    public QuadDataHashSet get() {
-        return dataset;
+    public RdfQuadSet get() {
+        return quadSet;
     }
 
     @Override
@@ -71,7 +72,7 @@ public class QuadDatasetProvider implements RdfQuadConsumer, Supplier<QuadDataHa
     }
 
     public void quad(RdfResource subject, RdfResource predicate, RdfTerm object, RdfResource graph) {
-        dataset.add(terms.createQuad(subject, predicate, object, graph));
+        quadSet.add(terms.createQuad(subject, predicate, object, graph));
     }
 
     public RdfTermFactory terms() {
@@ -79,7 +80,7 @@ public class QuadDatasetProvider implements RdfQuadConsumer, Supplier<QuadDataHa
     }
 
     protected void quad(RdfQuad quad) {
-        dataset.add(quad);
+        quadSet.add(quad);
     }
 
     protected final RdfResource getResource(final String name) {

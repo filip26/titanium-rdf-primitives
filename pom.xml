@@ -68,13 +68,7 @@
             <artifactId>titanium-rdf-n-quads</artifactId>
             <version>1.1.0-SNAPSHOT</version>
         </dependency>        
-        <!--  Tests -->
-        <dependency>
-            <groupId>com.apicatalog</groupId>
-            <artifactId>titanium-rdfc</artifactId>
-            <version>2.0.0</version>
-        </dependency>        
-        
+        <!--  Tests -->        
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>jakarta.json</artifactId>

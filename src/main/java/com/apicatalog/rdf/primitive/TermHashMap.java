@@ -30,9 +30,7 @@ public class TermHashMap extends HashMap<String, RdfTerm> implements RdfTermFact
 
     @Override
     public RdfTriple createTriple(RdfResource subject, RdfResource predicate, RdfTerm object) {
-        // TODO Auto-generated method stub
-        return null;
-
+        return Triple.of(subject, predicate, object);
     }
 
     @Override

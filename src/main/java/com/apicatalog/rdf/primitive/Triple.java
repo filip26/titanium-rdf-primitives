@@ -35,6 +35,19 @@ public class Triple implements RdfTriple {
         this.object = object;
     }
 
+    public static RdfTriple of(RdfResource subject, RdfResource predicate, RdfTerm object) {
+        if (subject == null) {
+            throw new IllegalArgumentException("Triple subject must not be null.");
+        }
+        if (predicate == null) {
+            throw new IllegalArgumentException("Triple predicate must not be null.");
+        }
+        if (object == null) {
+            throw new IllegalArgumentException("Triple object must not be null.");
+        }
+        return new Triple(subject, predicate, object);
+    }
+    
     @Override
     public RdfResource subject() {
         return subject;

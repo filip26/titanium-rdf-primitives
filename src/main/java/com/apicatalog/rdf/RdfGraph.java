@@ -18,7 +18,7 @@ package com.apicatalog.rdf;
 import java.util.stream.Stream;
 
 public interface RdfGraph {
-    
+
     boolean contains(RdfTriple triple);
 
     Stream<RdfTriple> stream();
@@ -29,4 +29,8 @@ public interface RdfGraph {
      * @return total number of triples in the graph
      */
     int size();
+
+    boolean add(RdfTriple triple);
+
+    boolean remove(RdfTriple triple);
 }

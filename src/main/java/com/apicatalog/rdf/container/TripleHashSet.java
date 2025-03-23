@@ -34,4 +34,9 @@ public final class TripleHashSet extends HashSet<RdfTriple> implements RdfGraph 
     public boolean contains(RdfTriple triple) {
         return super.contains(triple);
     }
+
+    @Override
+    public boolean remove(RdfTriple triple) {
+        return super.remove(triple);
+    }
 }

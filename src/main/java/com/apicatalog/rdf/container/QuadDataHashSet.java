@@ -33,7 +33,7 @@ public final class QuadDataHashSet extends HashSet<RdfQuad> implements RdfDatase
 
     private static final long serialVersionUID = -1555324500576292374L;
 
-    final TripleHashSet defaultGraph;
+    final RdfGraph defaultGraph;
 
     /** named graphs index */
     final Map<RdfResource, TripleHashSet> graphs;
@@ -141,5 +141,10 @@ public final class QuadDataHashSet extends HashSet<RdfQuad> implements RdfDatase
                 it.remove();
             }
         };
+    }
+
+    @Override
+    public boolean remove(RdfQuad quad) {
+        return super.remove(quad);
     }
 }

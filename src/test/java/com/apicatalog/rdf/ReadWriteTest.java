@@ -33,9 +33,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import com.apicatalog.rdf.NQuadsTestCase.Type;
 import com.apicatalog.rdf.api.RdfConsumerException;
-import com.apicatalog.rdf.canon.RdfCanon;
-import com.apicatalog.rdf.fnc.QuadDatasetProvider;
+import com.apicatalog.rdf.container.QuadOrderedSet;
 import com.apicatalog.rdf.fnc.QuadEmitter;
+import com.apicatalog.rdf.fnc.QuadSetProvider;
 import com.apicatalog.rdf.nquads.NQuadsReader;
 import com.apicatalog.rdf.nquads.NQuadsReaderException;
 import com.apicatalog.rdf.nquads.NQuadsWriter;
@@ -62,14 +62,13 @@ class ReadWriteTest {
             final String input = isToString(is);
             assertNotNull(input);
 
-            final QuadDatasetProvider datasetProvider = new QuadDatasetProvider();
+            final QuadSetProvider datasetProvider = new QuadSetProvider(new QuadOrderedSet());
             new NQuadsReader(new StringReader(input)).provide(datasetProvider);
 
             final RdfQuadSet dataset = datasetProvider.get();
 
             assertNotNull(dataset);
 
-//            final RdfCanon canon = RdfCanon.create("SHA-256");
             final StringWriter writer = new StringWriter();
 
             final QuadEmitter emitter = new QuadEmitter(new NQuadsWriter(writer));
@@ -80,9 +79,6 @@ class ReadWriteTest {
                 final RdfQuad quad = it.next();
                 emitter.emit(quad);
             }
-
-//            final StringWriter writer = new StringWriter();
-//            canon.provide(new NQuadsWriter(writer));
 
             final String result = writer.toString();
             assertNotNull(result);

@@ -15,13 +15,13 @@
  */
 package com.apicatalog.rdf.container;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.stream.Stream;
 
 import com.apicatalog.rdf.RdfQuad;
 import com.apicatalog.rdf.RdfQuadSet;
 
-public final class QuadHashSet extends HashSet<RdfQuad> implements RdfQuadSet {
+public final class QuadOrderedSet extends LinkedHashSet<RdfQuad> implements RdfQuadSet {
 
     private static final long serialVersionUID = -3610909138877791762L;
 
@@ -33,5 +33,10 @@ public final class QuadHashSet extends HashSet<RdfQuad> implements RdfQuadSet {
     @Override
     public boolean contains(RdfQuad quad) {
         return super.contains((Object) quad);
+    }
+
+    @Override
+    public boolean remove(RdfQuad quad) {
+        return super.remove(quad);
     }
 }

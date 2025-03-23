@@ -21,6 +21,10 @@ public interface RdfQuadSet {
 
     boolean contains(RdfQuad quad);
 
+    boolean add(RdfQuad quad);
+    
+    boolean remove(RdfQuad quad);
+    
     Stream<RdfQuad> stream();
 
     /**
