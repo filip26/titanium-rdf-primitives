@@ -32,6 +32,15 @@ public class Quad extends Triple implements RdfQuad {
     }
 
     public static RdfQuad of(RdfResource subject, RdfResource predicate, RdfTerm object, RdfResource graphName) {
+        if (subject == null) {
+            throw new IllegalArgumentException("Quad subject must not be null.");
+        }
+        if (predicate == null) {
+            throw new IllegalArgumentException("Quad predicate must not be null.");
+        }
+        if (object == null) {
+            throw new IllegalArgumentException("Quad object must not be null.");
+        }
         return new Quad(subject, predicate, object, graphName);
     }
 

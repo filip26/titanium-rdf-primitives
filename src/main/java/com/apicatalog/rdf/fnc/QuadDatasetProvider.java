@@ -1,5 +1,6 @@
 package com.apicatalog.rdf.fnc;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import com.apicatalog.rdf.RdfLiteral.Direction;
@@ -47,9 +48,10 @@ public class QuadDatasetProvider implements RdfQuadConsumer, Supplier<QuadDataHa
                     object,
                     datatype,
                     language,
-                    direction != null
-                            ? Direction.valueOf(direction.toUpperCase())
-                            : null);
+                    Optional.ofNullable(direction)
+                            .map(String::toUpperCase)
+                            .map(Direction::valueOf)
+                            .orElse(null));
 
         } else if (datatype != null) {
             objectValue = terms.createLiteral(object, datatype);
@@ -61,13 +63,15 @@ public class QuadDatasetProvider implements RdfQuadConsumer, Supplier<QuadDataHa
         quad(getResource(subject),
                 getResource(predicate),
                 objectValue,
-                getResource(graph));
+                Optional.ofNullable(graph)
+                        .map(this::getResource)
+                        .orElse(null));
 
         return this;
     }
 
-    public void quad(RdfResource subject, RdfResource predicate, RdfTerm value, RdfResource graph) {
-        dataset.add(terms.createQuad(subject, predicate, value, graph));
+    public void quad(RdfResource subject, RdfResource predicate, RdfTerm object, RdfResource graph) {
+        dataset.add(terms.createQuad(subject, predicate, object, graph));
     }
 
     public RdfTermFactory terms() {

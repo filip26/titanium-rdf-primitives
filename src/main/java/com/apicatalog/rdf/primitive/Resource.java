@@ -32,6 +32,9 @@ public class Resource implements RdfResource {
     }
 
     public static Resource createBlankNode(String value) {
+        if (value == null || value.trim().isEmpty()) {
+            throw new IllegalArgumentException("Blank node value must be non empty string, but was [" + value + "].");
+        }
         return createBlankNode(value, null);
     }
 
@@ -40,6 +43,9 @@ public class Resource implements RdfResource {
     }
 
     public static Resource createIRI(String value) {
+        if (value == null || value.trim().isEmpty()) {
+            throw new IllegalArgumentException("IRI value must be non empty string, but was [" + value + "].");
+        }
         return createIRI(value, null);
     }
 

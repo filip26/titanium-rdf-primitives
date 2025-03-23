@@ -54,15 +54,10 @@ public interface RdfLiteral extends RdfTerm {
     Optional<Direction> direction();
     
     @Override
-    default boolean isIRI() {
-        return false;
+    default boolean isLiteral() {
+        return true;
     }
-
-    @Override
-    default boolean isBlankNode() {
-        return false;
-    }
-
+     
     @Override
     default RdfLiteral asLiteral() {
         return this;

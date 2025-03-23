@@ -31,19 +31,15 @@ public class Literal implements RdfLiteral {
     Literal(String lexicalValue, String datatype, String key) {
         this.lexicalValue = lexicalValue;
         this.datatype = datatype;
+        this.key = key;
     }
 
     public static Literal of(String lexicalValue, String datatype) {
         return of(lexicalValue, datatype, null);
     }
 
-    public static Literal of(String lexicalValue, String datatype, String key) {
+    static Literal of(String lexicalValue, String datatype, String key) {
         return new Literal(lexicalValue, datatype, key);
-    }
-
-    @Override
-    public boolean isLiteral() {
-        return true;
     }
 
     @Override
