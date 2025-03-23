@@ -1,21 +1,35 @@
 package com.apicatalog.rdf.fnc;
 
+import java.util.Iterator;
 import java.util.Optional;
 
 import com.apicatalog.rdf.RdfLiteral;
 import com.apicatalog.rdf.RdfLiteral.Direction;
 import com.apicatalog.rdf.RdfQuad;
+import com.apicatalog.rdf.RdfQuadSet;
 import com.apicatalog.rdf.RdfResource;
 import com.apicatalog.rdf.RdfTerm;
 import com.apicatalog.rdf.api.RdfConsumerException;
 import com.apicatalog.rdf.api.RdfQuadConsumer;
 
-public class QuadEmitter {
+public final class QuadEmitter {
 
     final RdfQuadConsumer consumer;
 
     public QuadEmitter(RdfQuadConsumer consumer) {
         this.consumer = consumer;
+    }
+
+    public QuadEmitter emit(RdfQuadSet set) throws RdfConsumerException {
+        emit(consumer, set);
+        return this;
+    }
+
+    public static void emit(RdfQuadConsumer consumer, RdfQuadSet set) throws RdfConsumerException {
+        final Iterator<RdfQuad> it = set.stream().iterator();
+        while (it.hasNext()) {
+            emit(consumer, it.next());
+        }
     }
 
     public QuadEmitter emit(RdfQuad quad) throws RdfConsumerException {
@@ -74,7 +88,7 @@ public class QuadEmitter {
         throw new IllegalStateException("An unknown object [" + subject + " " + predicate + " " + object + " " + graph + "].");
     }
 
-    static final String resource(final RdfResource resource) {
+    static String resource(final RdfResource resource) {
 
         final String value = resource.value();
 

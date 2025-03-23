@@ -25,7 +25,6 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URISyntaxException;
-import java.util.Iterator;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.params.ParameterizedTest;
@@ -71,14 +70,7 @@ class ReadWriteTest {
 
             final StringWriter writer = new StringWriter();
 
-            final QuadEmitter emitter = new QuadEmitter(new NQuadsWriter(writer));
-
-            final Iterator<RdfQuad> it = dataset.stream().iterator();
-
-            while (it.hasNext()) {
-                final RdfQuad quad = it.next();
-                emitter.emit(quad);
-            }
+            QuadEmitter.emit(new NQuadsWriter(writer), dataset);
 
             final String result = writer.toString();
             assertNotNull(result);
