@@ -21,16 +21,13 @@ public interface RdfQuadSet {
 
     boolean contains(RdfQuad quad);
 
-    boolean add(RdfQuad quad);
+    default boolean add(RdfQuad quad) {
+        throw new UnsupportedOperationException();
+    }
     
-    boolean remove(RdfQuad quad);
+    default boolean remove(RdfQuad quad) {
+        throw new UnsupportedOperationException();
+    }
     
     Stream<RdfQuad> stream();
-
-    /**
-     * Get the size of the dataset.
-     *
-     * @return total number of quads in the dataset across all graphs
-     */
-    int size();
 }

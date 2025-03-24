@@ -23,12 +23,16 @@ public interface RdfResource extends RdfTerm {
 
     String value();
 
-    @Override
     boolean isBlankNode();
 
-    @Override
+
     boolean isIRI();
 
+    @Override
+    default boolean isResource() {
+        return true;
+    }
+    
     @Override
     default RdfResource asResource() {
         return this;

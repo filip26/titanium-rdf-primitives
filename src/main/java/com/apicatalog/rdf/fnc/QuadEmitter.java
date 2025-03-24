@@ -67,7 +67,7 @@ public final class QuadEmitter {
             return;
         }
 
-        if (object.isIRI() || object.isBlankNode()) {
+        if (object.isResource()) {
             consumer.quad(
                     resource(subject),
                     resource(predicate),

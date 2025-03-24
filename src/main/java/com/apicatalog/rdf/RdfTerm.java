@@ -33,22 +33,12 @@ public interface RdfTerm {
     }
 
     /**
-     * Indicates if the value type is an absolute IRI.
-     *
-     * @return <code>true</code> if the value type is IRI, <code>false</code>
-     *         otherwise.
-     */
-    default boolean isIRI() {
-        return false;
-    }
-
-    /**
-     * Indicates if the value type is blank node identifier.
+     * Indicates if the value type is IRI or blank node identifier.
      *
      * @return <code>true</code> if the value type is blank node, <code>false</code>
      *         otherwise.
      */
-    default boolean isBlankNode() {
+    default boolean isResource() {
         return false;
     }
 

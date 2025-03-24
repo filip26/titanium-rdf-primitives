@@ -21,16 +21,13 @@ public interface RdfGraph {
 
     boolean contains(RdfTriple triple);
 
+    default boolean add(RdfTriple triple) {
+        throw new UnsupportedOperationException();
+    }
+
+    default boolean remove(RdfTriple triple) {
+        throw new UnsupportedOperationException();
+    }
+    
     Stream<RdfTriple> stream();
-
-    /**
-     * Get the size of the graph.
-     *
-     * @return total number of triples in the graph
-     */
-    int size();
-
-    boolean add(RdfTriple triple);
-
-    boolean remove(RdfTriple triple);
 }
