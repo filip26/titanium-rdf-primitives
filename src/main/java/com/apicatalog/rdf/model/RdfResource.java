@@ -13,21 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.apicatalog.rdf;
+package com.apicatalog.rdf.model;
 
-import java.util.stream.Stream;
+/**
+ * An RDF statement's value. Represents an absolute IRI or blank node
+ * identifier.
+ */
+public interface RdfResource extends RdfTerm {
 
-public interface RdfQuadSet {
+    String value();
 
-    boolean contains(RdfQuad quad);
+    boolean isBlankNode();
 
-    default boolean add(RdfQuad quad) {
-        throw new UnsupportedOperationException();
+
+    boolean isIRI();
+
+    @Override
+    default boolean isResource() {
+        return true;
     }
     
-    default boolean remove(RdfQuad quad) {
-        throw new UnsupportedOperationException();
+    @Override
+    default RdfResource asResource() {
+        return this;
     }
-    
-    Stream<RdfQuad> stream();
 }

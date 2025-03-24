@@ -18,7 +18,7 @@ package com.apicatalog.rdf.primitive;
 import java.util.Objects;
 import java.util.Optional;
 
-import com.apicatalog.rdf.RdfLiteral;
+import com.apicatalog.rdf.model.RdfLiteral;
 import com.apicatalog.rdf.nquads.NQuadsWriter;
 
 public class Literal implements RdfLiteral {

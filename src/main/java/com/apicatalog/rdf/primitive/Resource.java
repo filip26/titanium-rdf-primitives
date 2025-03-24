@@ -17,7 +17,7 @@ package com.apicatalog.rdf.primitive;
 
 import java.util.Objects;
 
-import com.apicatalog.rdf.RdfResource;
+import com.apicatalog.rdf.model.RdfResource;
 
 public class Resource implements RdfResource {
 

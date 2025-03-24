@@ -18,8 +18,8 @@ package com.apicatalog.rdf.container;
 import java.util.LinkedHashSet;
 import java.util.stream.Stream;
 
-import com.apicatalog.rdf.RdfQuad;
-import com.apicatalog.rdf.RdfQuadSet;
+import com.apicatalog.rdf.model.RdfQuad;
+import com.apicatalog.rdf.model.RdfQuadSet;
 
 public final class OrderedQuadSet extends LinkedHashSet<RdfQuad> implements RdfQuadSet {
 

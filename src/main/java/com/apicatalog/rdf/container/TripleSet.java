@@ -18,8 +18,8 @@ package com.apicatalog.rdf.container;
 import java.util.HashSet;
 import java.util.stream.Stream;
 
-import com.apicatalog.rdf.RdfGraph;
-import com.apicatalog.rdf.RdfTriple;
+import com.apicatalog.rdf.model.RdfGraph;
+import com.apicatalog.rdf.model.RdfTriple;
 
 public final class TripleSet extends HashSet<RdfTriple> implements RdfGraph {
 

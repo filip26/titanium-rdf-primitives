@@ -17,9 +17,9 @@ package com.apicatalog.rdf.primitive;
 
 import java.util.Objects;
 
-import com.apicatalog.rdf.RdfResource;
-import com.apicatalog.rdf.RdfTerm;
-import com.apicatalog.rdf.RdfTriple;
+import com.apicatalog.rdf.model.RdfResource;
+import com.apicatalog.rdf.model.RdfTerm;
+import com.apicatalog.rdf.model.RdfTriple;
 
 public class Triple implements RdfTriple {
 

@@ -1,23 +1,27 @@
-package com.apicatalog.rdf.fnc;
+package com.apicatalog.rdf.flow;
 
 import java.util.Iterator;
 import java.util.Optional;
 
-import com.apicatalog.rdf.RdfLiteral;
-import com.apicatalog.rdf.RdfLiteral.Direction;
-import com.apicatalog.rdf.RdfQuad;
-import com.apicatalog.rdf.RdfQuadSet;
-import com.apicatalog.rdf.RdfResource;
-import com.apicatalog.rdf.RdfTerm;
 import com.apicatalog.rdf.api.RdfConsumerException;
 import com.apicatalog.rdf.api.RdfQuadConsumer;
+import com.apicatalog.rdf.model.RdfLiteral;
+import com.apicatalog.rdf.model.RdfQuad;
+import com.apicatalog.rdf.model.RdfQuadSet;
+import com.apicatalog.rdf.model.RdfResource;
+import com.apicatalog.rdf.model.RdfTerm;
+import com.apicatalog.rdf.model.RdfLiteral.Direction;
 
 public final class QuadEmitter {
 
     final RdfQuadConsumer consumer;
 
-    public QuadEmitter(RdfQuadConsumer consumer) {
+    QuadEmitter(RdfQuadConsumer consumer) {
         this.consumer = consumer;
+    }
+
+    public static QuadEmitter create(RdfQuadConsumer consumer) {
+        return new QuadEmitter(consumer);
     }
 
     public QuadEmitter emit(RdfQuadSet set) throws RdfConsumerException {
@@ -62,7 +66,7 @@ public final class QuadEmitter {
                             .map(String::toLowerCase)
                             .orElse(null),
                     Optional.ofNullable(graph)
-                            .map(RdfResource::value)
+                            .map(QuadEmitter::resource)
                             .orElse(null));
             return;
         }
@@ -76,7 +80,7 @@ public final class QuadEmitter {
                     null,
                     null,
                     Optional.ofNullable(graph)
-                            .map(RdfResource::value)
+                            .map(QuadEmitter::resource)
                             .orElse(null));
             return;
         }

@@ -13,15 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.apicatalog.rdf;
+package com.apicatalog.rdf.model;
 
-import java.util.Optional;
+import java.util.stream.Stream;
 
-/**
- * Represents an immutable N-Quad statement.
- */
-public interface RdfQuad extends RdfTriple {
+public interface RdfQuadSet {
 
-    Optional<RdfResource> graphName();
+    boolean contains(RdfQuad quad);
+
+    default boolean add(RdfQuad quad) {
+        throw new UnsupportedOperationException();
+    }
     
+    default boolean remove(RdfQuad quad) {
+        throw new UnsupportedOperationException();
+    }
+    
+    Stream<RdfQuad> stream();
 }

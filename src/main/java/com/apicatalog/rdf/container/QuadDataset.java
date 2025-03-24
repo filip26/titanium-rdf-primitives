@@ -23,11 +23,11 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import com.apicatalog.rdf.RdfDataset;
-import com.apicatalog.rdf.RdfGraph;
-import com.apicatalog.rdf.RdfQuad;
-import com.apicatalog.rdf.RdfQuadSet;
-import com.apicatalog.rdf.RdfResource;
+import com.apicatalog.rdf.model.RdfDataset;
+import com.apicatalog.rdf.model.RdfGraph;
+import com.apicatalog.rdf.model.RdfQuad;
+import com.apicatalog.rdf.model.RdfQuadSet;
+import com.apicatalog.rdf.model.RdfResource;
 
 public final class QuadDataset extends HashSet<RdfQuad> implements RdfDataset, RdfQuadSet {
 

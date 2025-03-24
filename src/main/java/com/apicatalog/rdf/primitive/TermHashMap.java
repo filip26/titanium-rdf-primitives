@@ -2,13 +2,13 @@ package com.apicatalog.rdf.primitive;
 
 import java.util.HashMap;
 
-import com.apicatalog.rdf.RdfLiteral;
-import com.apicatalog.rdf.RdfLiteral.Direction;
-import com.apicatalog.rdf.RdfQuad;
-import com.apicatalog.rdf.RdfResource;
-import com.apicatalog.rdf.RdfTerm;
-import com.apicatalog.rdf.RdfTermFactory;
-import com.apicatalog.rdf.RdfTriple;
+import com.apicatalog.rdf.model.RdfLiteral;
+import com.apicatalog.rdf.model.RdfQuad;
+import com.apicatalog.rdf.model.RdfResource;
+import com.apicatalog.rdf.model.RdfTerm;
+import com.apicatalog.rdf.model.RdfTermFactory;
+import com.apicatalog.rdf.model.RdfTriple;
+import com.apicatalog.rdf.model.RdfLiteral.Direction;
 
 public class TermHashMap extends HashMap<String, RdfTerm> implements RdfTermFactory {
 

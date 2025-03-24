@@ -13,28 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.apicatalog.rdf;
+package com.apicatalog.rdf.model;
+
+import java.util.Optional;
 
 /**
- * An RDF statement's value. Represents an absolute IRI or blank node
- * identifier.
+ * Represents an immutable N-Quad statement.
  */
-public interface RdfResource extends RdfTerm {
+public interface RdfQuad extends RdfTriple {
 
-    String value();
-
-    boolean isBlankNode();
-
-
-    boolean isIRI();
-
-    @Override
-    default boolean isResource() {
-        return true;
-    }
+    Optional<RdfResource> graphName();
     
-    @Override
-    default RdfResource asResource() {
-        return this;
-    }
 }

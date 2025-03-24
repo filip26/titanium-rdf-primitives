@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.Set;
 
-import com.apicatalog.rdf.RdfDataset;
-import com.apicatalog.rdf.RdfGraph;
-import com.apicatalog.rdf.RdfResource;
+import com.apicatalog.rdf.model.RdfDataset;
+import com.apicatalog.rdf.model.RdfGraph;
+import com.apicatalog.rdf.model.RdfResource;
 
 public final class GraphDataset extends HashMap<RdfResource, RdfGraph> implements RdfDataset {
 

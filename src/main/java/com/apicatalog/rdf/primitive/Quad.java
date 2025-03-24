@@ -18,9 +18,9 @@ package com.apicatalog.rdf.primitive;
 import java.util.Objects;
 import java.util.Optional;
 
-import com.apicatalog.rdf.RdfQuad;
-import com.apicatalog.rdf.RdfResource;
-import com.apicatalog.rdf.RdfTerm;
+import com.apicatalog.rdf.model.RdfQuad;
+import com.apicatalog.rdf.model.RdfResource;
+import com.apicatalog.rdf.model.RdfTerm;
 
 public class Quad extends Triple implements RdfQuad {
 

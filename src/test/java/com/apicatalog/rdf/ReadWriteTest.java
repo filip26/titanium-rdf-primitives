@@ -33,8 +33,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 import com.apicatalog.rdf.NQuadsTestCase.Type;
 import com.apicatalog.rdf.api.RdfConsumerException;
 import com.apicatalog.rdf.container.OrderedQuadSet;
-import com.apicatalog.rdf.fnc.QuadEmitter;
-import com.apicatalog.rdf.fnc.QuadSetProvider;
+import com.apicatalog.rdf.flow.QuadAcceptor;
+import com.apicatalog.rdf.flow.QuadEmitter;
+import com.apicatalog.rdf.model.RdfQuadSet;
 import com.apicatalog.rdf.nquads.NQuadsReader;
 import com.apicatalog.rdf.nquads.NQuadsReaderException;
 import com.apicatalog.rdf.nquads.NQuadsWriter;
@@ -61,7 +62,7 @@ class ReadWriteTest {
             final String input = isToString(is);
             assertNotNull(input);
 
-            final QuadSetProvider datasetProvider = new QuadSetProvider(new OrderedQuadSet());
+            final QuadAcceptor datasetProvider = new QuadAcceptor(new OrderedQuadSet());
             new NQuadsReader(new StringReader(input)).provide(datasetProvider);
 
             final RdfQuadSet dataset = datasetProvider.get();

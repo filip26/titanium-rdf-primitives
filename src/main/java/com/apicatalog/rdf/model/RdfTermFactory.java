@@ -1,6 +1,6 @@
-package com.apicatalog.rdf;
+package com.apicatalog.rdf.model;
 
-import com.apicatalog.rdf.RdfLiteral.Direction;
+import com.apicatalog.rdf.model.RdfLiteral.Direction;
 
 public interface RdfTermFactory {
 
