@@ -88,7 +88,7 @@ public class QuadAcceptor implements RdfQuadConsumer, Supplier<RdfQuadSet> {
         return terms;
     }
 
-    public void blankNodeIssuer(Function<String, String> blankNodeIssuer) {
+    void blankNodeIssuer(Function<String, String> blankNodeIssuer) {
         if (blankNodeIssuer == null) {
             throw new IllegalArgumentException();
         }
