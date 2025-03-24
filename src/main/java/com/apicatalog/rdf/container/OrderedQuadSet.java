@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 import com.apicatalog.rdf.RdfQuad;
 import com.apicatalog.rdf.RdfQuadSet;
 
-public final class QuadOrderedSet extends LinkedHashSet<RdfQuad> implements RdfQuadSet {
+public final class OrderedQuadSet extends LinkedHashSet<RdfQuad> implements RdfQuadSet {
 
     private static final long serialVersionUID = -3610909138877791762L;
 

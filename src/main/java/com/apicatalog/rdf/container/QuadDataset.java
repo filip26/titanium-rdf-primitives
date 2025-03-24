@@ -29,22 +29,22 @@ import com.apicatalog.rdf.RdfQuad;
 import com.apicatalog.rdf.RdfQuadSet;
 import com.apicatalog.rdf.RdfResource;
 
-public final class QuadDataHashSet extends HashSet<RdfQuad> implements RdfDataset, RdfQuadSet {
+public final class QuadDataset extends HashSet<RdfQuad> implements RdfDataset, RdfQuadSet {
 
     private static final long serialVersionUID = -1555324500576292374L;
 
     final RdfGraph defaultGraph;
 
     /** named graphs index */
-    final Map<RdfResource, TripleHashSet> graphs;
+    final Map<RdfResource, RdfGraph> graphs;
 
-    QuadDataHashSet() {
+    QuadDataset() {
         this.graphs = new HashMap<>();
-        this.defaultGraph = new TripleHashSet();
+        this.defaultGraph = new TripleSet();
     }
 
-    public static QuadDataHashSet create() {
-        return new QuadDataHashSet();
+    public static QuadDataset create() {
+        return new QuadDataset();
     }
 
     @Override
@@ -63,11 +63,11 @@ public final class QuadDataHashSet extends HashSet<RdfQuad> implements RdfDatase
 
         if (graphName.isPresent()) {
 
-            TripleHashSet graph = graphs.get(graphName.get());
+            RdfGraph graph = graphs.get(graphName.get());
 
             if (graph == null) {
 
-                graph = new TripleHashSet();
+                graph = new TripleSet();
                 graphs.put(graphName.get(), graph);
                 graph.add(nquad);
                 return super.add(nquad);

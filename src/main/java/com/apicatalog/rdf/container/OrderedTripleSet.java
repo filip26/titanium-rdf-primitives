@@ -15,13 +15,13 @@
  */
 package com.apicatalog.rdf.container;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.stream.Stream;
 
 import com.apicatalog.rdf.RdfGraph;
 import com.apicatalog.rdf.RdfTriple;
 
-public final class TripleHashSet extends HashSet<RdfTriple> implements RdfGraph {
+public final class OrderedTripleSet extends LinkedHashSet<RdfTriple> implements RdfGraph {
 
     private static final long serialVersionUID = 3719269032259156466L;
 
