@@ -26,10 +26,10 @@
         <junit.version>5.12.1</junit.version>
     </properties>
 
-    <name>Titanium RDF</name>
+    <name>Titanium RDF Primitives</name>
 
     <description>
-        Simple RDF API &amp; N-Quads Reader/Writer (formerly part of Titanium JSON-LD)
+      RDF primitives, Quad, Triple, Graph, Literal, LangString, ... (formerly part of Titanium JSON-LD)
     </description>
 
     <licenses>
