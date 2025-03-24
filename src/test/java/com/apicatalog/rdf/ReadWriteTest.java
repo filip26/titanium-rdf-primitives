@@ -32,12 +32,14 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import com.apicatalog.rdf.NQuadsTestCase.Type;
 import com.apicatalog.rdf.api.RdfConsumerException;
+import com.apicatalog.rdf.model.RdfDataset;
 import com.apicatalog.rdf.model.RdfQuadSet;
 import com.apicatalog.rdf.nquads.NQuadsReader;
 import com.apicatalog.rdf.nquads.NQuadsReaderException;
 import com.apicatalog.rdf.nquads.NQuadsWriter;
 import com.apicatalog.rdf.primitive.flow.QuadAcceptor;
 import com.apicatalog.rdf.primitive.flow.QuadEmitter;
+import com.apicatalog.rdf.primitive.set.OrderedQuadDataset;
 import com.apicatalog.rdf.primitive.set.OrderedQuadSet;
 
 import jakarta.json.Json;
@@ -103,6 +105,58 @@ class ReadWriteTest {
         }
     }
 
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("data")
+    void testOrderedQuadDataset(NQuadsTestCase testCase) throws IOException, URISyntaxException {
+
+        assertNotNull(testCase);
+        assertNotNull(testCase.getName());
+        assertNotNull(testCase.getType());
+
+        try (final InputStream is = ReadWriteTest.class.getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".nq")) {
+
+            final String input = isToString(is);
+            assertNotNull(input);
+
+            final OrderedQuadDataset dataset = new OrderedQuadDataset();
+            final QuadAcceptor datasetProvider = new QuadAcceptor(dataset);
+            new NQuadsReader(new StringReader(input)).provide(datasetProvider);
+
+            assertNotNull(dataset);
+
+            final StringWriter writer = new StringWriter();
+
+            QuadEmitter.emit(new NQuadsWriter(writer), (RdfDataset)dataset);
+
+            final String result = writer.toString();
+            assertNotNull(result);
+
+            assertEquals(Type.POSITIVE, testCase.getType());
+
+            String expected = input;
+
+            try (final InputStream out = ReadWriteTest.class.getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".out.nq")) {
+                if (out != null) {
+                    expected = isToString(out);
+                }
+            }
+
+            final boolean match = expected.equals(result);
+
+            if (!match) {
+                System.out.println(testCase.getName());
+                System.out.println("Expected:");
+                System.out.println(expected);
+                System.out.println("Result:");
+                System.out.println(result);
+            }
+
+            assertTrue(match);
+
+        } catch (IllegalArgumentException | NQuadsReaderException | RdfConsumerException e) {
+            assertEquals(Type.NEGATIVE, testCase.getType());
+        }
+    }
     static final Stream<NQuadsTestCase> data() throws IOException {
         return load(TEST_CASE_BASE_PATH, "manifest.json");
     }

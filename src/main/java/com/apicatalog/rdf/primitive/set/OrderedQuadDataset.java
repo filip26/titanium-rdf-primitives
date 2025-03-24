@@ -16,8 +16,8 @@
 package com.apicatalog.rdf.primitive.set;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -29,18 +29,18 @@ import com.apicatalog.rdf.model.RdfQuad;
 import com.apicatalog.rdf.model.RdfQuadSet;
 import com.apicatalog.rdf.model.RdfResource;
 
-public final class QuadDataset extends HashSet<RdfQuad> implements RdfDataset, RdfQuadSet {
+public final class OrderedQuadDataset extends LinkedHashSet<RdfQuad> implements RdfDataset, RdfQuadSet {
 
-    private static final long serialVersionUID = -1555324500576292374L;
+    private static final long serialVersionUID = 1506212509200399718L;
 
     final RdfGraph defaultGraph;
 
     /** named graphs index */
     final Map<RdfResource, RdfGraph> graphs;
 
-    public QuadDataset() {
+    public OrderedQuadDataset() {
         this.graphs = new HashMap<>();
-        this.defaultGraph = new TripleSet();
+        this.defaultGraph = new OrderedTripleSet();
     }
 
     @Override
@@ -63,7 +63,7 @@ public final class QuadDataset extends HashSet<RdfQuad> implements RdfDataset, R
 
             if (graph == null) {
 
-                graph = new TripleSet();
+                graph = new OrderedTripleSet();
                 graphs.put(graphName.get(), graph);
                 graph.add(nquad);
                 return super.add(nquad);

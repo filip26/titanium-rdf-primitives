@@ -23,7 +23,7 @@ import com.apicatalog.rdf.model.RdfQuadSet;
 
 public final class QuadSet extends HashSet<RdfQuad> implements RdfQuadSet {
 
-    private static final long serialVersionUID = -3610909138877791762L;
+    private static final long serialVersionUID = -5996430799126147354L;
 
     @Override
     public Stream<RdfQuad> stream() {

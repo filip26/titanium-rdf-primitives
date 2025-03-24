@@ -12,7 +12,7 @@ import com.apicatalog.rdf.model.RdfResource;
 import com.apicatalog.rdf.model.RdfTerm;
 import com.apicatalog.rdf.model.RdfTermFactory;
 import com.apicatalog.rdf.primitive.TermHashMap;
-import com.apicatalog.rdf.primitive.set.QuadDataset;
+import com.apicatalog.rdf.primitive.set.QuadSet;
 
 public class QuadAcceptor implements RdfQuadConsumer, Supplier<RdfQuadSet> {
 
@@ -20,7 +20,7 @@ public class QuadAcceptor implements RdfQuadConsumer, Supplier<RdfQuadSet> {
     protected final RdfQuadSet quadSet;
 
     public QuadAcceptor() {
-        this(QuadDataset.create(), new TermHashMap());
+        this(new QuadSet(), new TermHashMap());
     }
 
     public QuadAcceptor(final RdfQuadSet quadSet) {
@@ -28,7 +28,7 @@ public class QuadAcceptor implements RdfQuadConsumer, Supplier<RdfQuadSet> {
     }
 
     public QuadAcceptor(final RdfTermFactory terms) {
-        this(QuadDataset.create(), terms);
+        this(new QuadSet(), terms);
     }
 
     public QuadAcceptor(final RdfQuadSet quadSet, final RdfTermFactory terms) {
