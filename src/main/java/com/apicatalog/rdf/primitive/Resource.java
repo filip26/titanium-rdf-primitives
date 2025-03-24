@@ -17,6 +17,7 @@ package com.apicatalog.rdf.primitive;
 
 import java.util.Objects;
 
+import com.apicatalog.rdf.api.RdfQuadConsumer;
 import com.apicatalog.rdf.model.RdfResource;
 
 public class Resource implements RdfResource {
@@ -97,14 +98,16 @@ public class Resource implements RdfResource {
     @Override
     public String toString() {
         if (key == null) {
-            key = key(value, blankNode); 
+            key = key(value, blankNode);
         }
         return key;
     }
-    
+
     static final String key(String value, boolean blankNode) {
         return blankNode
-                ? Objects.toString(value)
+                ? (RdfQuadConsumer.isBlank(value)
+                        ? value
+                        : ("_:" + Objects.toString(value)))
                 : '<' + Objects.toString(value) + '>';
     }
 }

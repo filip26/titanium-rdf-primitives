@@ -87,7 +87,7 @@ public class QuadAcceptor implements RdfQuadConsumer, Supplier<RdfQuadSet> {
 
     protected final RdfResource getResource(final String name) {
         if (RdfQuadConsumer.isBlank(name)) {
-            return terms.createBlankNode(name);
+            return terms.createBlankNode(name.substring(2));
         }
         return terms.createIRI(name);
     }

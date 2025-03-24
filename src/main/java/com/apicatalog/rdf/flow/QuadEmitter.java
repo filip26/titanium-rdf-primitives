@@ -12,11 +12,11 @@ import com.apicatalog.rdf.model.RdfResource;
 import com.apicatalog.rdf.model.RdfTerm;
 import com.apicatalog.rdf.model.RdfLiteral.Direction;
 
-public final class QuadEmitter {
+public class QuadEmitter {
 
-    final RdfQuadConsumer consumer;
+    protected final RdfQuadConsumer consumer;
 
-    QuadEmitter(RdfQuadConsumer consumer) {
+    protected QuadEmitter(RdfQuadConsumer consumer) {
         this.consumer = consumer;
     }
 
@@ -32,7 +32,8 @@ public final class QuadEmitter {
     public static void emit(RdfQuadConsumer consumer, RdfQuadSet set) throws RdfConsumerException {
         final Iterator<RdfQuad> it = set.stream().iterator();
         while (it.hasNext()) {
-            emit(consumer, it.next());
+            RdfQuad quad = it.next();
+            emit(consumer, quad);
         }
     }
 
