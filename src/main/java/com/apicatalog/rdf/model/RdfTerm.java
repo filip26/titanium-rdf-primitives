@@ -16,16 +16,31 @@
 package com.apicatalog.rdf.model;
 
 /**
- * An RDF statement's value. Represents an absolute IRI or blank node identifier
- * or RDF literal or {@link RdfTriple} term (RDF 1.2).
+ * Represents the value of an RDF statement.
+ * <p>
+ * An {@code RdfTerm} can be one of the following:
+ * <ul>
+ * <li>An absolute IRI or a blank node identifier ({@link RdfResource})</li>
+ * <li>An RDF literal ({@link RdfLiteral})</li>
+ * <li>An RDF triple, representing RDF-star (RDF 1.2) embedded triples
+ * ({@link RdfTriple})</li>
+ * </ul>
+ * <p>
+ * This interface provides type-checking methods to determine the specific kind
+ * of RDF term, as well as casting methods that allow safe access to the
+ * underlying representation.
  *
+ * @see <a href="https://www.w3.org/TR/rdf11-concepts/#dfn-rdf-term">RDF 1.1
+ *      Term</a>
+ * @see <a href="https://www.w3.org/TR/rdf12-concepts/#section-rdf-star">RDF 1.2
+ *      (RDF-star)</a>
  */
 public interface RdfTerm {
 
     /**
-     * Indicates if the value type is RDF literal.
+     * Indicates whether this term is an RDF literal.
      *
-     * @return <code>true</code> if the value type is literal, <code>false</code>
+     * @return {@code true} if the term is an {@link RdfLiteral}; {@code false}
      *         otherwise.
      */
     default boolean isLiteral() {
@@ -33,9 +48,10 @@ public interface RdfTerm {
     }
 
     /**
-     * Indicates if the value type is IRI or blank node identifier.
+     * Indicates whether this term is a resource, which includes absolute IRIs and
+     * blank node identifiers.
      *
-     * @return <code>true</code> if the value type is blank node, <code>false</code>
+     * @return {@code true} if the term is an {@link RdfResource}; {@code false}
      *         otherwise.
      */
     default boolean isResource() {
@@ -43,39 +59,71 @@ public interface RdfTerm {
     }
 
     /**
-     * Indicates if the value is a triple term. Introduced in RDF1.2
-     * 
-     * @return <code>true</code> is the term value is a triple term
+     * Indicates whether this term is an RDF triple.
+     * <p>
+     * RDF triples are supported for RDF-star (RDF 1.2) compatibility.
+     *
+     * @return {@code true} if the term is an {@link RdfTriple}; {@code false}
+     *         otherwise.
      */
     default boolean isTriple() {
         return false;
     }
 
     /**
-     * Return the RdfValue as a RdfLiteral
+     * Returns this term as an {@link RdfLiteral}.
      *
-     * @return the RdfValue as a RdfLiteral
-     * @throws ClassCastException if the RdfValue is not a RdfLiteral
-     *
+     * @return the {@link RdfLiteral} representation of this term.
+     * @throws ClassCastException if this term is not an {@link RdfLiteral}.
      */
     default RdfLiteral asLiteral() {
         throw new ClassCastException();
     }
 
+    /**
+     * Returns this term as an {@link RdfResource}.
+     *
+     * @return the {@link RdfResource} representation of this term.
+     * @throws ClassCastException if this term is not an {@link RdfResource}.
+     */
     default RdfResource asResource() {
         throw new ClassCastException();
     }
 
+    /**
+     * Returns this term as an {@link RdfTriple}.
+     *
+     * @return the {@link RdfTriple} representation of this term.
+     * @throws ClassCastException if this term is not an {@link RdfTriple}.
+     */
     default RdfTriple asTriple() {
         throw new ClassCastException();
     }
 
+    /**
+     * Compares this RDF term to the specified object. Implementations must override
+     * this method to provide equality checks appropriate to the term type.
+     *
+     * @param o the object to compare with this term.
+     * @return {@code true} if the specified object is equal to this term;
+     *         {@code false} otherwise.
+     */
     @Override
     boolean equals(Object o);
 
+    /**
+     * Returns a hash code value for this RDF term.
+     *
+     * @return a hash code consistent with {@link #equals(Object)}.
+     */
     @Override
     int hashCode();
 
+    /**
+     * Returns a string representation of this RDF term.
+     *
+     * @return a string describing this RDF term.
+     */
     @Override
     String toString();
 }

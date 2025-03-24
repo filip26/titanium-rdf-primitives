@@ -55,7 +55,7 @@ public class Resource implements RdfResource {
     }
 
     @Override
-    public boolean isBlankNode() {
+    public boolean isBlank() {
         return blankNode;
     }
 
@@ -92,7 +92,7 @@ public class Resource implements RdfResource {
         }
         RdfResource other = (RdfResource) obj;
         return Objects.equals(value, other.value())
-                && blankNode == other.isBlankNode();
+                && blankNode == other.isBlank();
     }
 
     @Override

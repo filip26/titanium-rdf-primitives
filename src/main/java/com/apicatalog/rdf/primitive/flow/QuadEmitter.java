@@ -136,7 +136,7 @@ public class QuadEmitter {
 
         final String value = resource.value();
 
-        return (resource.isBlankNode() && !RdfQuadConsumer.isBlank(value))
+        return (resource.isBlank() && !RdfQuadConsumer.isBlank(value))
                 ? "_:" + value
                 : value;
     }

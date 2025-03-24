@@ -34,6 +34,7 @@ public final class GraphDataset extends HashMap<RdfResource, RdfGraph> implement
         return Optional.ofNullable(super.get(graphName));
     }
 
+    @Override
     public GraphDataset namedGraph(RdfResource graphName, RdfGraph graph) {
         super.put(graphName, graph);
         return this;

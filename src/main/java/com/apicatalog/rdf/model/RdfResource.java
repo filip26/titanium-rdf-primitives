@@ -23,7 +23,7 @@ public interface RdfResource extends RdfTerm {
 
     String value();
 
-    boolean isBlankNode();
+    boolean isBlank();
 
 
     boolean isIRI();
