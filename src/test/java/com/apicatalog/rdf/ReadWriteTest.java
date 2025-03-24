@@ -51,7 +51,7 @@ class ReadWriteTest {
 
     @ParameterizedTest(name = "{0}")
     @MethodSource("data")
-    void testReadWrite(NQuadsTestCase testCase) throws IOException, URISyntaxException {
+    void testOrderedQuadSet(NQuadsTestCase testCase) throws IOException, URISyntaxException {
 
         assertNotNull(testCase);
         assertNotNull(testCase.getName());
