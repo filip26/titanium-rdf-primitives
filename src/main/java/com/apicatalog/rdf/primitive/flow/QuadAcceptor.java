@@ -1,6 +1,7 @@
 package com.apicatalog.rdf.primitive.flow;
 
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.apicatalog.rdf.api.RdfConsumerException;
@@ -18,6 +19,7 @@ public class QuadAcceptor implements RdfQuadConsumer, Supplier<RdfQuadSet> {
 
     protected final RdfTermFactory terms;
     protected final RdfQuadSet quadSet;
+    protected Function<String, String> blankNodeIssuer;
 
     public QuadAcceptor() {
         this(new QuadSet(), new TermHashMap());
@@ -34,6 +36,7 @@ public class QuadAcceptor implements RdfQuadConsumer, Supplier<RdfQuadSet> {
     public QuadAcceptor(final RdfQuadSet quadSet, final RdfTermFactory terms) {
         this.quadSet = quadSet;
         this.terms = terms;
+        this.blankNodeIssuer = Function.identity();
     }
 
     @Override
@@ -85,9 +88,16 @@ public class QuadAcceptor implements RdfQuadConsumer, Supplier<RdfQuadSet> {
         return terms;
     }
 
+    public void blankNodeIssuer(Function<String, String> blankNodeIssuer) {
+        if (blankNodeIssuer == null) {
+            throw new IllegalArgumentException();
+        }
+        this.blankNodeIssuer = blankNodeIssuer;
+    }
+    
     protected final RdfResource getResource(final String name) {
         if (RdfQuadConsumer.isBlank(name)) {
-            return terms.createBlankNode(name.substring(2));
+            return terms.createBlankNode(blankNodeIssuer.apply(name.substring(2)));
         }
         return terms.createIRI(name);
     }

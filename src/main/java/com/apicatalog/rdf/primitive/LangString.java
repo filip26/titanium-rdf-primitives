@@ -20,6 +20,15 @@ import java.util.Optional;
 
 import com.apicatalog.rdf.model.RdfLiteral;
 
+/**
+ * Represents an RDF language-tagged string.
+ * <p>
+ * A {@link LangString} is an RDF literal that consists of a lexical value (the
+ * value of the literal), a datatype, an optional language tag, and an optional
+ * direction (left-to-right or right-to-left). It implements the
+ * {@link RdfLiteral} interface and provides methods for retrieving the lexical
+ * value, datatype, language tag, and direction of the language-tagged string.
+ */
 public class LangString extends Literal implements RdfLiteral {
 
     final String langTag;
@@ -32,10 +41,31 @@ public class LangString extends Literal implements RdfLiteral {
         this.direction = direction;
     }
 
+    /**
+     * Factory method to create a {@link LangString} with the specified lexical
+     * value, datatype, and language tag.
+     * 
+     * @param lexicalValue the lexical value of the language-tagged string
+     * @param datatype     the datatype of the literal (e.g.,
+     *                     {@code rdf:langString})
+     * @param langTag      the language tag (e.g., "en", "fr")
+     * @return a new {@link LangString} instance
+     */
     public static LangString of(String lexicalValue, String datatype, String langTag) {
         return of(lexicalValue, datatype, langTag, (Direction) null);
     }
 
+    /**
+     * Factory method to create a {@link LangString} with the specified lexical
+     * value, datatype, language tag, and direction.
+     * 
+     * @param lexicalValue the lexical value of the language-tagged string
+     * @param datatype     the datatype of the literal (e.g.,
+     *                     {@code rdf:langString})
+     * @param langTag      the language tag (e.g., "en", "fr")
+     * @param direction    the text direction (LTR or RTL)
+     * @return a new {@link LangString} instance
+     */
     public static LangString of(String lexicalValue, String datatype, String langTag, String direction) {
         if (direction != null) {
             return new LangString(lexicalValue, datatype, langTag, Direction.valueOf(direction.toUpperCase()), null);
@@ -43,6 +73,17 @@ public class LangString extends Literal implements RdfLiteral {
         return of(lexicalValue, datatype, langTag, (Direction) null, null);
     }
 
+    /**
+     * Factory method to create a {@link LangString} with the specified lexical
+     * value, datatype, language tag, and direction.
+     * 
+     * @param lexicalValue the lexical value of the language-tagged string
+     * @param datatype     the datatype of the literal (e.g.,
+     *                     {@code rdf:langString})
+     * @param langTag      the language tag (e.g., "en", "fr")
+     * @param direction    the text direction (LTR or RTL)
+     * @return a new {@link LangString} instance
+     */
     public static LangString of(String lexicalValue, String datatype, String langTag, Direction direction) {
         return new LangString(lexicalValue, datatype, langTag, direction, null);
     }
