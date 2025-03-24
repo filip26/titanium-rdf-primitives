@@ -12,7 +12,7 @@ A Java implementation of RDF primitives.
 
 Formerly part of [Titanium JSON-LD](https://github.com/filip26/titanium-json-ld)
 
-## Example
+## Examples
 
 ```javascript
 
@@ -24,10 +24,20 @@ new NQuadsReader(reader).provide(new QuadAcceptor(dataset));
 
 // Get the default graph
 Graph graph = dataset.defaultGraph();
+```
 
-// Serialize as N-Quads
-QuadEmitter.emit(new NQuadsWriter(writer), dataset);
-QuadEmitter.emit(new NQuadsWriter(writer), graph, graphName);
+```javascript
+// Initialize the QuadEmitter with an N-Quads writer
+var emitter = new QuadEmitter(new NQuadsWriter(writer));
+
+// Serialize the entire dataset as N-Quads
+emitter.emit(dataset);
+
+// Serialize a specific named graph as N-Quads
+emitter.emit(graph, graphName);
+
+// Serialize a single quad as N-Quads
+emitter.emit(quad);
 ```
 
 
