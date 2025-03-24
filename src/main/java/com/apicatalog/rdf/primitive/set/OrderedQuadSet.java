@@ -15,13 +15,13 @@
  */
 package com.apicatalog.rdf.primitive.set;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.stream.Stream;
 
 import com.apicatalog.rdf.model.RdfQuad;
 import com.apicatalog.rdf.model.RdfQuadSet;
 
-public final class OrderedQuadSet extends HashSet<RdfQuad> implements RdfQuadSet {
+public final class OrderedQuadSet extends LinkedHashSet<RdfQuad> implements RdfQuadSet {
 
     private static final long serialVersionUID = -3610909138877791762L;
 
