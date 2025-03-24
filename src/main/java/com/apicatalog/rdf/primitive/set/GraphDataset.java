@@ -1,4 +1,4 @@
-package com.apicatalog.rdf.container;
+package com.apicatalog.rdf.primitive.set;
 
 import java.util.HashMap;
 import java.util.Optional;

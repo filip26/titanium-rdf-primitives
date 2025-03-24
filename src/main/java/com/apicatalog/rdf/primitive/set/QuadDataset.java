@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.apicatalog.rdf.container;
+package com.apicatalog.rdf.primitive.set;
 
 import java.util.HashMap;
 import java.util.HashSet;

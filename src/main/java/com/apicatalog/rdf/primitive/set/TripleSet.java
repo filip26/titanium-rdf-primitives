@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.apicatalog.rdf.container;
+package com.apicatalog.rdf.primitive.set;
 
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.stream.Stream;
 
 import com.apicatalog.rdf.model.RdfGraph;
 import com.apicatalog.rdf.model.RdfTriple;
 
-public final class OrderedTripleSet extends LinkedHashSet<RdfTriple> implements RdfGraph {
+public final class TripleSet extends HashSet<RdfTriple> implements RdfGraph {
 
-    private static final long serialVersionUID = 3719269032259156466L;
+    private static final long serialVersionUID = -6850516669568590411L;
 
     @Override
     public Stream<RdfTriple> stream() {

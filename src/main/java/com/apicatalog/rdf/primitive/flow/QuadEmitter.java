@@ -1,4 +1,4 @@
-package com.apicatalog.rdf.flow;
+package com.apicatalog.rdf.primitive.flow;
 
 import java.util.Iterator;
 import java.util.Optional;
@@ -28,6 +28,16 @@ public class QuadEmitter {
         emit(consumer, set);
         return this;
     }
+    
+    public QuadEmitter emit(RdfQuad quad) throws RdfConsumerException {
+        emit(consumer, quad);
+        return this;
+    }
+
+    public QuadEmitter emit(RdfResource subject, RdfResource predicate, RdfTerm object, RdfResource graph) throws RdfConsumerException {
+        emit(consumer, subject, predicate, object, graph);
+        return this;
+    }
 
     public static void emit(RdfQuadConsumer consumer, RdfQuadSet set) throws RdfConsumerException {
         final Iterator<RdfQuad> it = set.stream().iterator();
@@ -35,11 +45,6 @@ public class QuadEmitter {
             RdfQuad quad = it.next();
             emit(consumer, quad);
         }
-    }
-
-    public QuadEmitter emit(RdfQuad quad) throws RdfConsumerException {
-        emit(consumer, quad);
-        return this;
     }
 
     public static void emit(RdfQuadConsumer consumer, RdfQuad quad) throws RdfConsumerException {

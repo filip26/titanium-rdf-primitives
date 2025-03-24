@@ -13,30 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.apicatalog.rdf.container;
+package com.apicatalog.rdf.primitive.set;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.stream.Stream;
 
-import com.apicatalog.rdf.model.RdfGraph;
-import com.apicatalog.rdf.model.RdfTriple;
+import com.apicatalog.rdf.model.RdfQuad;
+import com.apicatalog.rdf.model.RdfQuadSet;
 
-public final class TripleSet extends HashSet<RdfTriple> implements RdfGraph {
+public final class OrderedQuadSet extends LinkedHashSet<RdfQuad> implements RdfQuadSet {
 
-    private static final long serialVersionUID = -6850516669568590411L;
+    private static final long serialVersionUID = -3610909138877791762L;
 
     @Override
-    public Stream<RdfTriple> stream() {
+    public Stream<RdfQuad> stream() {
         return super.stream();
     }
 
     @Override
-    public boolean contains(RdfTriple triple) {
-        return super.contains(triple);
+    public boolean contains(RdfQuad quad) {
+        return super.contains((Object) quad);
     }
 
     @Override
-    public boolean remove(RdfTriple triple) {
-        return super.remove(triple);
+    public boolean remove(RdfQuad quad) {
+        return super.remove(quad);
     }
 }

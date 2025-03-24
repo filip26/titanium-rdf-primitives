@@ -32,13 +32,13 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import com.apicatalog.rdf.NQuadsTestCase.Type;
 import com.apicatalog.rdf.api.RdfConsumerException;
-import com.apicatalog.rdf.container.OrderedQuadSet;
-import com.apicatalog.rdf.flow.QuadAcceptor;
-import com.apicatalog.rdf.flow.QuadEmitter;
 import com.apicatalog.rdf.model.RdfQuadSet;
 import com.apicatalog.rdf.nquads.NQuadsReader;
 import com.apicatalog.rdf.nquads.NQuadsReaderException;
 import com.apicatalog.rdf.nquads.NQuadsWriter;
+import com.apicatalog.rdf.primitive.flow.QuadAcceptor;
+import com.apicatalog.rdf.primitive.flow.QuadEmitter;
+import com.apicatalog.rdf.primitive.set.OrderedQuadSet;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;

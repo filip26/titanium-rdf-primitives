@@ -1,18 +1,18 @@
-package com.apicatalog.rdf.flow;
+package com.apicatalog.rdf.primitive.flow;
 
 import java.util.Optional;
 import java.util.function.Supplier;
 
 import com.apicatalog.rdf.api.RdfConsumerException;
 import com.apicatalog.rdf.api.RdfQuadConsumer;
-import com.apicatalog.rdf.container.QuadDataset;
+import com.apicatalog.rdf.model.RdfLiteral.Direction;
 import com.apicatalog.rdf.model.RdfQuad;
 import com.apicatalog.rdf.model.RdfQuadSet;
 import com.apicatalog.rdf.model.RdfResource;
 import com.apicatalog.rdf.model.RdfTerm;
 import com.apicatalog.rdf.model.RdfTermFactory;
-import com.apicatalog.rdf.model.RdfLiteral.Direction;
 import com.apicatalog.rdf.primitive.TermHashMap;
+import com.apicatalog.rdf.primitive.set.QuadDataset;
 
 public class QuadAcceptor implements RdfQuadConsumer, Supplier<RdfQuadSet> {
 
@@ -39,6 +39,16 @@ public class QuadAcceptor implements RdfQuadConsumer, Supplier<RdfQuadSet> {
     @Override
     public RdfQuadSet get() {
         return quadSet;
+    }
+
+    public QuadAcceptor quad(RdfResource subject, RdfResource predicate, RdfTerm object, RdfResource graph) {
+        quadSet.add(terms.createQuad(subject, predicate, object, graph));
+        return this;
+    }
+
+    public QuadAcceptor quad(RdfQuad quad) {
+        quadSet.add(quad);
+        return this;
     }
 
     @Override
@@ -68,16 +78,6 @@ public class QuadAcceptor implements RdfQuadConsumer, Supplier<RdfQuadSet> {
                         .map(this::getResource)
                         .orElse(null));
 
-        return this;
-    }
-
-    public QuadAcceptor quad(RdfResource subject, RdfResource predicate, RdfTerm object, RdfResource graph) {
-        quadSet.add(terms.createQuad(subject, predicate, object, graph));
-        return this;
-    }
-
-    public QuadAcceptor quad(RdfQuad quad) {
-        quadSet.add(quad);
         return this;
     }
 
