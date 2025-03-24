@@ -26,10 +26,10 @@
         <junit.version>5.12.1</junit.version>
     </properties>
 
-    <name>Titanium RDF</name>
+    <name>Titanium RDF Primitives</name>
 
     <description>
-        Simple RDF API &amp; N-Quads Reader/Writer (formerly part of Titanium JSON-LD)
+      RDF primitives, Quad, Triple, Graph, Literal, LangString, ... (formerly part of Titanium JSON-LD)
     </description>
 
     <licenses>
@@ -66,9 +66,9 @@
         <dependency>
             <groupId>com.apicatalog</groupId>
             <artifactId>titanium-rdf-n-quads</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </dependency>        
-        <!--  Tests -->
+        <!--  Tests -->        
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>jakarta.json</artifactId>

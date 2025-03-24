@@ -17,28 +17,45 @@ package com.apicatalog.rdf.primitive;
 
 import java.util.Objects;
 
-import com.apicatalog.rdf.RdfResource;
+import com.apicatalog.rdf.api.RdfQuadConsumer;
+import com.apicatalog.rdf.model.RdfResource;
 
 public class Resource implements RdfResource {
 
     final String value;
     final boolean blankNode;
+    String key;
 
-    Resource(final String value, boolean isBlankNode) {
+    Resource(final String value, boolean isBlankNode, String key) {
         this.value = value;
         this.blankNode = isBlankNode;
+        this.key = key;
     }
 
     public static Resource createBlankNode(String value) {
-        return new Resource(value, true);
+        if (value == null || value.trim().isEmpty()) {
+            throw new IllegalArgumentException("Blank node value must be non empty string, but was [" + value + "].");
+        }
+        return createBlankNode(value, null);
+    }
+
+    static Resource createBlankNode(String value, String key) {
+        return new Resource(value, true, key);
     }
 
     public static Resource createIRI(String value) {
-        return new Resource(value, false);
+        if (value == null || value.trim().isEmpty()) {
+            throw new IllegalArgumentException("IRI value must be non empty string, but was [" + value + "].");
+        }
+        return createIRI(value, null);
+    }
+
+    static Resource createIRI(String value, String key) {
+        return new Resource(value, false, key);
     }
 
     @Override
-    public boolean isBlankNode() {
+    public boolean isBlank() {
         return blankNode;
     }
 
@@ -54,7 +71,7 @@ public class Resource implements RdfResource {
 
     @Override
     public int hashCode() {
-        return Objects.hash(value);
+        return Objects.hash(value, blankNode);
     }
 
     @Override
@@ -75,14 +92,22 @@ public class Resource implements RdfResource {
         }
         RdfResource other = (RdfResource) obj;
         return Objects.equals(value, other.value())
-                && blankNode == other.isBlankNode();
+                && blankNode == other.isBlank();
     }
 
     @Override
     public String toString() {
-        if (blankNode) {
-            return Objects.toString(value);
+        if (key == null) {
+            key = key(value, blankNode);
         }
-        return '<' + Objects.toString(value) + '>';
+        return key;
+    }
+
+    static final String key(String value, boolean blankNode) {
+        return blankNode
+                ? (RdfQuadConsumer.isBlank(value)
+                        ? value
+                        : ("_:" + Objects.toString(value)))
+                : '<' + Objects.toString(value) + '>';
     }
 }

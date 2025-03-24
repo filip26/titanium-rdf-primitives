@@ -18,9 +18,9 @@ package com.apicatalog.rdf.primitive;
 import java.util.Objects;
 import java.util.Optional;
 
-import com.apicatalog.rdf.RdfQuad;
-import com.apicatalog.rdf.RdfResource;
-import com.apicatalog.rdf.RdfTerm;
+import com.apicatalog.rdf.model.RdfQuad;
+import com.apicatalog.rdf.model.RdfResource;
+import com.apicatalog.rdf.model.RdfTerm;
 
 public class Quad extends Triple implements RdfQuad {
 
@@ -32,6 +32,15 @@ public class Quad extends Triple implements RdfQuad {
     }
 
     public static RdfQuad of(RdfResource subject, RdfResource predicate, RdfTerm object, RdfResource graphName) {
+        if (subject == null) {
+            throw new IllegalArgumentException("Quad subject must not be null.");
+        }
+        if (predicate == null) {
+            throw new IllegalArgumentException("Quad predicate must not be null.");
+        }
+        if (object == null) {
+            throw new IllegalArgumentException("Quad object must not be null.");
+        }
         return new Quad(subject, predicate, object, graphName);
     }
 
@@ -42,13 +51,10 @@ public class Quad extends Triple implements RdfQuad {
 
     @Override
     public String toString() {
-        final StringBuilder builder = new StringBuilder()
-                .append(subject)
-                .append(' ')
-                .append(predicate)
-                .append(' ')
-                .append(object)
-                .append(' ');
+
+        final StringBuilder builder = new StringBuilder();
+
+        printTriple(builder, subject, predicate, object).append(' ');
 
         if (graphName != null) {
             builder.append(graphName).append(' ');
@@ -59,10 +65,7 @@ public class Quad extends Triple implements RdfQuad {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + Objects.hash(graphName);
-        return result;
+        return Objects.hash(subject, predicate, object, graphName);
     }
 
     @Override
@@ -78,7 +81,7 @@ public class Quad extends Triple implements RdfQuad {
             return Objects.equals(graphName, other.graphName);
         }
         if (!(obj instanceof RdfQuad)) {
-            return false;
+            return graphName == null;
         }
         RdfQuad other = (RdfQuad) obj;
         return Objects.equals(graphName, other.graphName().orElse(null));

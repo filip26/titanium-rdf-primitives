@@ -17,9 +17,9 @@ package com.apicatalog.rdf.primitive;
 
 import java.util.Objects;
 
-import com.apicatalog.rdf.RdfResource;
-import com.apicatalog.rdf.RdfTerm;
-import com.apicatalog.rdf.RdfTriple;
+import com.apicatalog.rdf.model.RdfResource;
+import com.apicatalog.rdf.model.RdfTerm;
+import com.apicatalog.rdf.model.RdfTriple;
 
 public class Triple implements RdfTriple {
 
@@ -33,6 +33,19 @@ public class Triple implements RdfTriple {
         this.subject = subject;
         this.predicate = predicate;
         this.object = object;
+    }
+
+    public static RdfTriple of(RdfResource subject, RdfResource predicate, RdfTerm object) {
+        if (subject == null) {
+            throw new IllegalArgumentException("Triple subject must not be null.");
+        }
+        if (predicate == null) {
+            throw new IllegalArgumentException("Triple predicate must not be null.");
+        }
+        if (object == null) {
+            throw new IllegalArgumentException("Triple object must not be null.");
+        }
+        return new Triple(subject, predicate, object);
     }
     
     @Override
@@ -52,12 +65,7 @@ public class Triple implements RdfTriple {
 
     @Override
     public String toString() {
-        return new StringBuilder()
-                .append(subject)
-                .append(' ')
-                .append(predicate)
-                .append(' ')
-                .append(object)
+        return printTriple(new StringBuilder(), subject, predicate, object)
                 .append(' ')
                 .append('.')
                 .toString();
@@ -65,7 +73,7 @@ public class Triple implements RdfTriple {
 
     @Override
     public int hashCode() {
-        return Objects.hash(object, predicate, subject);
+        return Objects.hash(subject, predicate, object);
     }
 
     @Override
@@ -87,8 +95,29 @@ public class Triple implements RdfTriple {
         }
         RdfTriple other = (RdfTriple) obj;
         return Objects.equals(subject, other.subject())
-                && Objects.equals(object, other.object())
-                && Objects.equals(predicate, other.predicate());
+                && Objects.equals(predicate, other.predicate())
+                && Objects.equals(object, other.object());
     }
 
+    static final StringBuilder printTriple(StringBuilder builder, RdfResource subject, RdfResource predicate, RdfTerm object) {
+        builder.append(subject)
+                .append(' ')
+                .append(predicate)
+                .append(' ');
+
+        if (object.isTriple()) {
+            return printTripleTerm(builder, object.asTriple());
+        }
+
+        return builder.append(object);
+    }
+
+    static final StringBuilder printTripleTerm(StringBuilder builder, RdfTriple triple) {
+        builder.append("<<( ");
+        return printTriple(builder,
+                triple.subject(),
+                triple.predicate(),
+                triple.object())
+                .append(" )>>");
+    }
 }
