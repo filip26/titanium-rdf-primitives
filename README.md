@@ -48,14 +48,14 @@ emitter.emit(quad);
 <dependency>
     <groupId>com.apicatalog</groupId>
     <artifactId>titanium-rdf-primitives</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```gradle
-implementation("com.apicatalog:titanium-rdf-primitives:1.0.0")
+implementation("com.apicatalog:titanium-rdf-primitives:1.0.1")
 ```
 
 ## Contributing
