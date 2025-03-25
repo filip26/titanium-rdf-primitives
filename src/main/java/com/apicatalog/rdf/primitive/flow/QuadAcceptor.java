@@ -57,7 +57,7 @@ public class QuadAcceptor implements RdfQuadConsumer, Supplier<RdfQuadSet> {
     @Override
     public QuadAcceptor quad(String subject, String predicate, String object, String datatype, String language, String direction, String graph) throws RdfConsumerException {
         final RdfTerm objectValue;
-        if (language != null) {
+        if (language != null || direction != null) {
             objectValue = terms.createLangString(
                     object,
                     datatype,
@@ -94,7 +94,7 @@ public class QuadAcceptor implements RdfQuadConsumer, Supplier<RdfQuadSet> {
         }
         this.blankNodeIssuer = blankNodeIssuer;
     }
-    
+
     protected final RdfResource getResource(final String name) {
         if (RdfQuadConsumer.isBlank(name)) {
             return terms.createBlankNode(blankNodeIssuer.apply(name.substring(2)));
