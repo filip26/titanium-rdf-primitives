@@ -71,6 +71,16 @@ public interface RdfTerm {
     }
 
     /**
+     * Indicates whether this term is an RDF list.
+     *
+     * @return {@code true} if the term is an {@link RdfList}; {@code false}
+     *         otherwise.
+     */
+    default boolean isList() {
+        return false;
+    }
+
+    /**
      * Returns this term as an {@link RdfLiteral}.
      *
      * @return the {@link RdfLiteral} representation of this term.
@@ -97,6 +107,16 @@ public interface RdfTerm {
      * @throws ClassCastException if this term is not an {@link RdfTriple}.
      */
     default RdfTriple asTriple() {
+        throw new ClassCastException();
+    }
+
+    /**
+     * Returns this term as an {@link RdfList}.
+     *
+     * @return the {@link RdfList} representation of this term.
+     * @throws ClassCastException if this term is not an {@link RdfList}.
+     */
+    default RdfList asList() {
         throw new ClassCastException();
     }
 
