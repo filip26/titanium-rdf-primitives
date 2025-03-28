@@ -19,27 +19,19 @@ import java.util.Objects;
 import java.util.Optional;
 
 import com.apicatalog.rdf.model.RdfLiteral;
-import com.apicatalog.rdf.nquads.NQuadsWriter;
 
 public class Literal implements RdfLiteral {
 
     final String lexicalValue;
     final String datatype;
 
-    String key;
-
-    Literal(String lexicalValue, String datatype, String key) {
+    Literal(String lexicalValue, String datatype) {
         this.lexicalValue = lexicalValue;
         this.datatype = datatype;
-        this.key = key;
     }
 
     public static Literal of(String lexicalValue, String datatype) {
-        return of(lexicalValue, datatype, null);
-    }
-
-    static Literal of(String lexicalValue, String datatype, String key) {
-        return new Literal(lexicalValue, datatype, key);
+        return new Literal(lexicalValue, datatype);
     }
 
     @Override
@@ -94,20 +86,13 @@ public class Literal implements RdfLiteral {
 
     @Override
     public String toString() {
-        if (key == null) {
-            key = key(lexicalValue, datatype, null, null);
-        }
-        return key;
-    }
-
-    static final String key(String lexicalValue, String datatype, String langTag, Direction direction) {
-        return NQuadsWriter.literal(
-                lexicalValue,
-                datatype,
-                langTag,
-                Optional.ofNullable(direction)
-                        .map(Direction::name)
-                        .map(String::toLowerCase)
-                        .orElse(null));
+        return new StringBuilder()
+                .append(this.getClass().getSimpleName())
+                .append('[')
+                .append(lexicalValue)
+                .append(',')
+                .append(datatype)
+                .append(']')
+                .toString();
     }
 }
