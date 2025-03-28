@@ -40,15 +40,11 @@ public class TermHashMap extends HashMap<String, RdfTerm> implements RdfTermFact
 
     @Override
     public RdfLiteral createLiteral(String lexicalValue, String datatype) {
-        return (RdfLiteral) super.computeIfAbsent(
-                Literal.key(lexicalValue, datatype, null, null),
-                key -> Literal.of(lexicalValue, datatype, key));
+        return Literal.of(lexicalValue, datatype);
     }
 
     @Override
     public RdfLiteral createLangString(String lexicalValue, String datatype, String langTag, Direction direction) {
-        return (RdfLiteral) super.computeIfAbsent(
-                Literal.key(lexicalValue, datatype, langTag, direction),
-                key -> LangString.of(lexicalValue, datatype, langTag, direction, key));
+        return LangString.of(lexicalValue, datatype, langTag, direction);
     }
 }
