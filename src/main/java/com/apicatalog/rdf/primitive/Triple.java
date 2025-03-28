@@ -47,7 +47,7 @@ public class Triple implements RdfTriple {
         }
         return new Triple(subject, predicate, object);
     }
-    
+
     @Override
     public RdfResource subject() {
         return subject;
@@ -65,9 +65,13 @@ public class Triple implements RdfTriple {
 
     @Override
     public String toString() {
-        return printTriple(new StringBuilder(), subject, predicate, object)
-                .append(' ')
-                .append('.')
+        return printTriple(new StringBuilder()
+                .append(this.getClass().getSimpleName())
+                .append('['),
+                subject,
+                predicate,
+                object)
+                .append(']')
                 .toString();
     }
 
@@ -101,9 +105,9 @@ public class Triple implements RdfTriple {
 
     static final StringBuilder printTriple(StringBuilder builder, RdfResource subject, RdfResource predicate, RdfTerm object) {
         builder.append(subject)
-                .append(' ')
+                .append(',')
                 .append(predicate)
-                .append(' ');
+                .append(',');
 
         if (object.isTriple()) {
             return printTripleTerm(builder, object.asTriple());
@@ -113,11 +117,10 @@ public class Triple implements RdfTriple {
     }
 
     static final StringBuilder printTripleTerm(StringBuilder builder, RdfTriple triple) {
-        builder.append("<<( ");
-        return printTriple(builder,
+        return printTriple(builder.append('['),
                 triple.subject(),
                 triple.predicate(),
                 triple.object())
-                .append(" )>>");
+                .append(']');
     }
 }

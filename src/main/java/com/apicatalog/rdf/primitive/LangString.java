@@ -35,8 +35,8 @@ public class LangString extends Literal implements RdfLiteral {
 
     final Direction direction;
 
-    LangString(String lexicalValue, String datatype, String langTag, Direction direction, String key) {
-        super(lexicalValue, datatype, key);
+    LangString(String lexicalValue, String datatype, String langTag, Direction direction) {
+        super(lexicalValue, datatype);
         this.langTag = langTag;
         this.direction = direction;
     }
@@ -68,9 +68,9 @@ public class LangString extends Literal implements RdfLiteral {
      */
     public static LangString of(String lexicalValue, String datatype, String langTag, String direction) {
         if (direction != null) {
-            return new LangString(lexicalValue, datatype, langTag, Direction.valueOf(direction.toUpperCase()), null);
+            return new LangString(lexicalValue, datatype, langTag, Direction.valueOf(direction.toUpperCase()));
         }
-        return of(lexicalValue, datatype, langTag, (Direction) null, null);
+        return of(lexicalValue, datatype, langTag, (Direction) null);
     }
 
     /**
@@ -85,11 +85,7 @@ public class LangString extends Literal implements RdfLiteral {
      * @return a new {@link LangString} instance
      */
     public static LangString of(String lexicalValue, String datatype, String langTag, Direction direction) {
-        return new LangString(lexicalValue, datatype, langTag, direction, null);
-    }
-
-    static LangString of(String lexicalValue, String datatype, String langTag, Direction direction, String key) {
-        return new LangString(lexicalValue, datatype, langTag, direction, key);
+        return new LangString(lexicalValue, datatype, langTag, direction);
     }
 
     @Override
@@ -134,9 +130,17 @@ public class LangString extends Literal implements RdfLiteral {
 
     @Override
     public String toString() {
-        if (key == null) {
-            key = key(lexicalValue, datatype, langTag, direction);
-        }
-        return key;
+        return new StringBuilder()
+                .append(this.getClass().getSimpleName())
+                .append('[')
+                .append(lexicalValue)
+                .append(',')
+                .append(datatype)
+                .append(',')
+                .append(langTag)
+                .append(',')
+                .append(direction)
+                .append(']')
+                .toString();
     }
 }

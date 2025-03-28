@@ -52,15 +52,17 @@ public class Quad extends Triple implements RdfQuad {
     @Override
     public String toString() {
 
-        final StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder()
+                .append(this.getClass().getSimpleName())
+                .append('[');
 
-        printTriple(builder, subject, predicate, object).append(' ');
+        printTriple(builder, subject, predicate, object);
 
         if (graphName != null) {
-            builder.append(graphName).append(' ');
+            builder.append(',').append(graphName);
         }
 
-        return builder.append('.').toString();
+        return builder.append(']').toString();
     }
 
     @Override
