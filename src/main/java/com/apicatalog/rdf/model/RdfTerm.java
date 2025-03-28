@@ -73,10 +73,10 @@ public interface RdfTerm {
     /**
      * Indicates whether this term is a collection.
      *
-     * @return {@code true} if the term is an {@link RdfTermCollection}; {@code false}
+     * @return {@code true} if the term is an {@link RdfList}; {@code false}
      *         otherwise.
      */
-    default boolean isCollection() {
+    default boolean isList() {
         return false;
     }
 
@@ -111,12 +111,12 @@ public interface RdfTerm {
     }
 
     /**
-     * Returns this term as an {@link RdfTermCollection}.
+     * Returns this term as an {@link RdfList}.
      *
-     * @return the {@link RdfTermCollection} representation of this term.
-     * @throws ClassCastException if this term is not an {@link RdfTermCollection}.
+     * @return the {@link RdfList} representation of this term.
+     * @throws ClassCastException if this term is not an {@link RdfList}.
      */
-    default RdfTermCollection asCollection() {
+    default RdfList asList() {
         throw new ClassCastException();
     }
 

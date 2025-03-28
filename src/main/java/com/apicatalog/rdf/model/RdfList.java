@@ -1,5 +1,8 @@
 package com.apicatalog.rdf.model;
 
+import java.util.Map;
+import java.util.stream.Stream;
+
 /**
  * Represents an RDF List (rdf:List) data structure that holds an ordered
  * collection of RDF terms.
@@ -9,53 +12,29 @@ package com.apicatalog.rdf.model;
  * terms in RDF, where each term can be another {@link RdfTerm}.
  * </p>
  */
-public interface RdfList extends RdfTermCollection {
+public interface RdfList extends RdfTerm {
 
-    @Override
-    default Type type() {
-        return Type.List;
-    }
-    
-    /**
-     * Adds a term to the RDF list.
-     * <p>
-     * By default, this operation is unsupported and will throw an
-     * {@link UnsupportedOperationException}. Implementations that allow
-     * modifications to the RDF list should override this method to support adding
-     * elements.
-     * </p>
-     *
-     * @param term the {@link RdfTerm} to add to the list
-     * @return {@code true} if the term was successfully added (implementation
-     *         dependent)
-     * @throws UnsupportedOperationException if modification of the list is not
-     *                                       supported by the implementation
-     */
-    default boolean add(RdfTerm term) {
-        throw new UnsupportedOperationException("Modification of RDF list is not supported by default.");
+    boolean containsKey(RdfResource key);
+
+    boolean containsValue(RdfTerm value);
+
+    Stream<Map.Entry<RdfResource, RdfTerm>> stream();
+
+    default RdfTerm put(RdfResource key, RdfTerm value) {
+        throw new UnsupportedOperationException();
     }
 
-    /**
-     * Removes a term from the RDF list.
-     * <p>
-     * By default, this operation is unsupported and will throw an
-     * {@link UnsupportedOperationException}. Implementations that support the
-     * removal of terms should override this method to allow removing elements from
-     * the list.
-     * </p>
-     *
-     * @param term the {@link RdfTerm} to remove from the list
-     * @return {@code true} if the term was successfully removed (implementation
-     *         dependent)
-     * @throws UnsupportedOperationException if removal of the term is not supported
-     *                                       by the implementation
-     */
-    default boolean remove(RdfTerm term) {
-        throw new UnsupportedOperationException("Modification of RDF list is not supported by default.");
+    default RdfTerm remove(RdfResource key) {
+        throw new UnsupportedOperationException();
     }
-  
+
     @Override
-    default RdfList asCollection() {
+    default boolean isList() {
+        return true;
+    }
+
+    @Override
+    default RdfList asList() {
         return this;
     }
 }
