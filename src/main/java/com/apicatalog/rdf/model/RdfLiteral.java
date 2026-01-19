@@ -56,19 +56,17 @@ public interface RdfLiteral extends RdfTerm {
      * If the literal is a language-tagged string (e.g. rdf:langString), this method
      * returns the language tag; otherwise, it returns {@link Optional#empty()}.
      * 
-     * @return an {@link Optional} containing the language tag if present, or
-     *         {@link Optional#empty()} if not set
+     * @return the language tag if present, or <code>null</code> if not set
      */
-    Optional<String> language();
+    String language();
 
     /**
      * Returns the direction of the literal, which can be either left-to-right (LTR)
      * or right-to-left (RTL).
      * 
-     * @return an {@link Optional} containing the direction if present, or
-     *         {@link Optional#empty()} if not set
+     * @return the direction if present, or <code>null</code> if not set
      */
-    Optional<Direction> direction();
+    Direction direction();
 
     @Override
     default boolean isLiteral() {

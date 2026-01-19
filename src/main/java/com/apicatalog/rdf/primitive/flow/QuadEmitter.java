@@ -47,7 +47,8 @@ public class QuadEmitter {
         return this;
     }
 
-    public QuadEmitter emit(RdfResource subject, RdfResource predicate, RdfTerm object, RdfResource graph) throws RdfConsumerException {
+    public QuadEmitter emit(RdfResource subject, RdfResource predicate, RdfTerm object, RdfResource graph)
+            throws RdfConsumerException {
         emit(consumer, subject, predicate, object, graph);
         return this;
     }
@@ -65,7 +66,8 @@ public class QuadEmitter {
         }
     }
 
-    public static void emit(RdfQuadConsumer consumer, RdfGraph graph, RdfResource graphName) throws RdfConsumerException {
+    public static void emit(RdfQuadConsumer consumer, RdfGraph graph, RdfResource graphName)
+            throws RdfConsumerException {
         final Iterator<RdfTriple> it = graph.stream().iterator();
         while (it.hasNext()) {
             RdfTriple quad = it.next();
@@ -86,10 +88,11 @@ public class QuadEmitter {
                 quad.subject(),
                 quad.predicate(),
                 quad.object(),
-                quad.graphName().orElse(null));
+                quad.graph());
     }
 
-    public static void emit(RdfQuadConsumer consumer, RdfResource subject, RdfResource predicate, RdfTerm object, RdfResource graph) throws RdfConsumerException {
+    public static void emit(RdfQuadConsumer consumer, RdfResource subject, RdfResource predicate, RdfTerm object,
+            RdfResource graph) throws RdfConsumerException {
 
         if (object.isLiteral()) {
 
@@ -100,8 +103,8 @@ public class QuadEmitter {
                     resource(predicate),
                     literal.lexicalValue(),
                     literal.datatype(),
-                    literal.language().orElse(null),
-                    literal.direction()
+                    literal.language(),
+                    Optional.ofNullable(literal.direction())
                             .map(Direction::name)
                             .map(String::toLowerCase)
                             .orElse(null),
@@ -126,10 +129,12 @@ public class QuadEmitter {
         }
 
         if (object.isTriple()) {
-            throw new IllegalArgumentException("RDF triple terms are not supported, yet [" + subject + " " + predicate + " " + object + " " + graph + "].");
+            throw new IllegalArgumentException("RDF triple terms are not supported, yet [" + subject + " " + predicate
+                    + " " + object + " " + graph + "].");
         }
 
-        throw new IllegalStateException("An unknown object [" + subject + " " + predicate + " " + object + " " + graph + "].");
+        throw new IllegalStateException(
+                "An unknown object [" + subject + " " + predicate + " " + object + " " + graph + "].");
     }
 
     static String resource(final RdfResource resource) {

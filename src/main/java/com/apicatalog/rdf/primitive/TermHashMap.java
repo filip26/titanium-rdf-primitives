@@ -3,12 +3,12 @@ package com.apicatalog.rdf.primitive;
 import java.util.HashMap;
 
 import com.apicatalog.rdf.model.RdfLiteral;
+import com.apicatalog.rdf.model.RdfLiteral.Direction;
 import com.apicatalog.rdf.model.RdfQuad;
 import com.apicatalog.rdf.model.RdfResource;
 import com.apicatalog.rdf.model.RdfTerm;
 import com.apicatalog.rdf.model.RdfTermFactory;
 import com.apicatalog.rdf.model.RdfTriple;
-import com.apicatalog.rdf.model.RdfLiteral.Direction;
 
 public class TermHashMap extends HashMap<String, RdfTerm> implements RdfTermFactory {
 
@@ -30,21 +30,21 @@ public class TermHashMap extends HashMap<String, RdfTerm> implements RdfTermFact
 
     @Override
     public RdfTriple createTriple(RdfResource subject, RdfResource predicate, RdfTerm object) {
-        return Triple.of(subject, predicate, object);
+        return new Triple(subject, predicate, object);
     }
 
     @Override
     public RdfQuad createQuad(RdfResource subject, RdfResource predicate, RdfTerm object, RdfResource graph) {
-        return Quad.of(subject, predicate, object, graph);
+        return new Quad(subject, predicate, object, graph);
     }
 
     @Override
     public RdfLiteral createLiteral(String lexicalValue, String datatype) {
-        return Literal.of(lexicalValue, datatype);
+        return new Literal(lexicalValue, datatype);
     }
 
     @Override
     public RdfLiteral createLangString(String lexicalValue, String datatype, String langTag, Direction direction) {
-        return LangString.of(lexicalValue, datatype, langTag, direction);
+        return new LangString(lexicalValue, datatype, langTag, direction);
     }
 }

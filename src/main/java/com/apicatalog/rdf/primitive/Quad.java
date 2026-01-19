@@ -16,37 +16,22 @@
 package com.apicatalog.rdf.primitive;
 
 import java.util.Objects;
-import java.util.Optional;
 
 import com.apicatalog.rdf.model.RdfQuad;
 import com.apicatalog.rdf.model.RdfResource;
 import com.apicatalog.rdf.model.RdfTerm;
 
-public class Quad extends Triple implements RdfQuad {
+public record Quad(
+        RdfResource subject,
+        RdfResource predicate,
+        RdfTerm object,
+        RdfResource graph) implements RdfQuad {
 
-    final RdfResource graphName;
-
-    Quad(RdfResource subject, RdfResource predicate, RdfTerm object, RdfResource graphName) {
-        super(subject, predicate, object);
-        this.graphName = graphName;
-    }
-
-    public static RdfQuad of(RdfResource subject, RdfResource predicate, RdfTerm object, RdfResource graphName) {
-        if (subject == null) {
-            throw new IllegalArgumentException("Quad subject must not be null.");
-        }
-        if (predicate == null) {
-            throw new IllegalArgumentException("Quad predicate must not be null.");
-        }
-        if (object == null) {
-            throw new IllegalArgumentException("Quad object must not be null.");
-        }
-        return new Quad(subject, predicate, object, graphName);
-    }
-
-    @Override
-    public Optional<RdfResource> graphName() {
-        return Optional.ofNullable(graphName);
+    public Quad {
+        subject = Objects.requireNonNull(subject, "Quad subject must not be null.");
+        predicate = Objects.requireNonNull(predicate, "Quad predicate must not be null.");
+        object = Objects.requireNonNull(object, "Quad object must not be null.");
+        graph = Objects.requireNonNull(graph, "Quad graph must not be null.");
     }
 
     @Override
@@ -56,36 +41,12 @@ public class Quad extends Triple implements RdfQuad {
                 .append(this.getClass().getSimpleName())
                 .append('[');
 
-        printTriple(builder, subject, predicate, object);
+        Triple.printTriple(builder, subject, predicate, object);
 
-        if (graphName != null) {
-            builder.append(',').append(graphName);
+        if (graph != null) {
+            builder.append(',').append(graph);
         }
 
         return builder.append(']').toString();
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(subject, predicate, object, graphName);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!super.equals(obj)) {
-            return false;
-        }
-        if (getClass() == obj.getClass()) {
-            Quad other = (Quad) obj;
-            return Objects.equals(graphName, other.graphName);
-        }
-        if (!(obj instanceof RdfQuad)) {
-            return graphName == null;
-        }
-        RdfQuad other = (RdfQuad) obj;
-        return Objects.equals(graphName, other.graphName().orElse(null));
     }
 }

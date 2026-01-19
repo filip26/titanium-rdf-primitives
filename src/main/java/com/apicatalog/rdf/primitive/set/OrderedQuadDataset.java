@@ -55,16 +55,16 @@ public final class OrderedQuadDataset extends LinkedHashSet<RdfQuad> implements 
             throw new IllegalArgumentException();
         }
 
-        final Optional<RdfResource> graphName = nquad.graphName();
+        final var graphName = nquad.graph();
 
-        if (graphName.isPresent()) {
+        if (graphName != null) {
 
-            RdfGraph graph = graphs.get(graphName.get());
+            RdfGraph graph = graphs.get(graphName);
 
             if (graph == null) {
 
                 graph = new OrderedTripleSet();
-                graphs.put(graphName.get(), graph);
+                graphs.put(graphName, graph);
                 graph.add(nquad);
                 return super.add(nquad);
 
@@ -127,8 +127,8 @@ public final class OrderedQuadDataset extends LinkedHashSet<RdfQuad> implements 
 
             @Override
             public void remove() {
-                if (last.graphName().isPresent()) {
-                    graphs.get(last.graphName().get()).remove(last);
+                if (last.graph() != null) {
+                    graphs.get(last.graph()).remove(last);
 
                 } else {
                     defaultGraph.remove(last);

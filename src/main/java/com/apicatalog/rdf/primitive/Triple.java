@@ -21,46 +21,15 @@ import com.apicatalog.rdf.model.RdfResource;
 import com.apicatalog.rdf.model.RdfTerm;
 import com.apicatalog.rdf.model.RdfTriple;
 
-public class Triple implements RdfTriple {
+public record Triple(
+        RdfResource subject,
+        RdfResource predicate,
+        RdfTerm object) implements RdfTriple {
 
-    final RdfResource subject;
-
-    final RdfResource predicate;
-
-    final RdfTerm object;
-
-    Triple(final RdfResource subject, final RdfResource predicate, final RdfTerm object) {
-        this.subject = subject;
-        this.predicate = predicate;
-        this.object = object;
-    }
-
-    public static RdfTriple of(RdfResource subject, RdfResource predicate, RdfTerm object) {
-        if (subject == null) {
-            throw new IllegalArgumentException("Triple subject must not be null.");
-        }
-        if (predicate == null) {
-            throw new IllegalArgumentException("Triple predicate must not be null.");
-        }
-        if (object == null) {
-            throw new IllegalArgumentException("Triple object must not be null.");
-        }
-        return new Triple(subject, predicate, object);
-    }
-
-    @Override
-    public RdfResource subject() {
-        return subject;
-    }
-
-    @Override
-    public RdfResource predicate() {
-        return predicate;
-    }
-
-    @Override
-    public RdfTerm object() {
-        return object;
+    public Triple {
+        subject = Objects.requireNonNull(subject, "Triple subject must not be null.");
+        predicate = Objects.requireNonNull(predicate, "Triple predicate must not be null.");
+        object = Objects.requireNonNull(object, "Triple object must not be null.");
     }
 
     @Override
@@ -75,35 +44,8 @@ public class Triple implements RdfTriple {
                 .toString();
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(subject, predicate, object);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() == obj.getClass()) {
-            Triple other = (Triple) obj;
-            return Objects.equals(subject, other.subject)
-                    && Objects.equals(predicate, other.predicate)
-                    && Objects.equals(object, other.object);
-        }
-        if (!(obj instanceof RdfTriple)) {
-            return false;
-        }
-        RdfTriple other = (RdfTriple) obj;
-        return Objects.equals(subject, other.subject())
-                && Objects.equals(predicate, other.predicate())
-                && Objects.equals(object, other.object());
-    }
-
-    static final StringBuilder printTriple(StringBuilder builder, RdfResource subject, RdfResource predicate, RdfTerm object) {
+    static final StringBuilder printTriple(StringBuilder builder, RdfResource subject, RdfResource predicate,
+            RdfTerm object) {
         builder.append(subject)
                 .append(',')
                 .append(predicate)

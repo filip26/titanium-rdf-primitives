@@ -35,9 +35,7 @@ public interface RdfQuad extends RdfTriple {
      * {@link Optional} containing the graph name. Otherwise, it returns
      * {@link Optional#empty()} if no graph name is specified.
      *
-     * @return an {@link Optional} containing the graph name if present, or
-     *         {@link Optional#empty()} if not set
+     * @return the graph if present, or <code>null</code> if not set
      */
-    Optional<RdfResource> graphName();
-
+    RdfResource graph();
 }
