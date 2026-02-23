@@ -23,7 +23,7 @@
         <argLine>-Dfile.encoding=UTF-8</argLine>
         <!--  test resources -->
         <jakarta.json.version>2.0.1</jakarta.json.version>
-        <junit.version>5.14.2</junit.version>
+        <junit.version>5.14.3</junit.version>
     </properties>
 
     <name>Titanium RDF Primitives</name>
