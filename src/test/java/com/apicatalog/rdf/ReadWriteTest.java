@@ -119,15 +119,13 @@ class ReadWriteTest {
             final String input = isToString(is);
             assertNotNull(input);
 
-            final var dataset = new Dataset(LinkedHashSet::new);
+            final var dataset = new Dataset();
             final var provider = new DatasetProvider(dataset);
             new NQuadsReader(new StringReader(input)).provide(provider);
 
-            assertNotNull(dataset);
-
             final StringWriter writer = new StringWriter();
 
-            QuadEmitter.emit(new NQuadsWriter(writer), (RdfDataset) dataset);
+            QuadEmitter.emit(new NQuadsWriter(writer), dataset);
 
             final String result = writer.toString();
             assertNotNull(result);

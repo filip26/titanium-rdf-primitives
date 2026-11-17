@@ -15,11 +15,11 @@
  */
 package com.apicatalog.rdf.primitive;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Supplier;
 
 import com.apicatalog.rdf.model.RdfDataset;
 import com.apicatalog.rdf.model.RdfResource;
@@ -31,19 +31,12 @@ public class Dataset implements RdfDataset {
 
     /** named graphs index */
     protected Map<RdfResource, Set<RdfTriple>> graphs;
-    
-    protected Supplier<Set<RdfTriple>> factory;
 
     public Dataset() {
-        this(HashSet::new);
-    }
-    
-   public Dataset(Supplier<Set<RdfTriple>> factory) {
-        this.graphs = Map.of();
+        this.graphs = new HashMap<>();
         this.defaultGraph = Set.of();
-        this.factory = factory;
     }
-   
+
     @Override
     public Set<RdfTriple> defaultGraph() {
         return defaultGraph;
@@ -56,19 +49,12 @@ public class Dataset implements RdfDataset {
 
         // is named graph?
         if (graphName != null) {
-
-            var graph = graphs.get(graphName);
-
-            if (graph == null) {
-                graph = factory.get();
-                graphs.put(graphName, graph);
-            }
-            graph.add(triple);
+            graphs.computeIfAbsent(graphName, key -> new HashSet<>()).add(triple);
 
         } else {
             // then it's default graph
             if (defaultGraph.isEmpty()) {
-                defaultGraph = factory.get();
+                defaultGraph = new HashSet<>();
             }
 
             // add to default graph
@@ -84,6 +70,11 @@ public class Dataset implements RdfDataset {
     @Override
     public Set<RdfTriple> namedGraph(RdfResource graphName) {
         return graphs.get(graphName);
+    }
+
+    @Override
+    public void defaultGraph(Set<RdfTriple> graph) {
+        defaultGraph = new HashSet<RdfTriple>(graph);
     }
 
 }
