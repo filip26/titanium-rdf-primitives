@@ -67,14 +67,4 @@ public interface RdfLiteral extends RdfTerm {
      * @return the direction if present, or <code>null</code> if not set
      */
     Direction direction();
-
-    @Override
-    default boolean isLiteral() {
-        return true;
-    }
-
-    @Override
-    default RdfLiteral asLiteral() {
-        return this;
-    }
 }

@@ -12,7 +12,7 @@ import java.util.stream.Stream;
  * terms in RDF, where each term can be another {@link RdfTerm}.
  * </p>
  */
-public interface RdfList extends RdfTerm {
+interface RdfList extends RdfTerm {
 
     boolean containsKey(RdfResource key);
 
@@ -26,15 +26,5 @@ public interface RdfList extends RdfTerm {
 
     default RdfTerm remove(RdfResource key) {
         throw new UnsupportedOperationException();
-    }
-
-    @Override
-    default boolean isList() {
-        return true;
-    }
-
-    @Override
-    default RdfList asList() {
-        return this;
     }
 }

@@ -13,30 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.apicatalog.rdf.primitive.set;
+package com.apicatalog.rdf.primitive;
 
-import java.util.HashSet;
-import java.util.stream.Stream;
+import java.util.Objects;
 
-import com.apicatalog.rdf.model.RdfGraph;
-import com.apicatalog.rdf.model.RdfTriple;
+import com.apicatalog.rdf.model.RdfResource;
 
-public final class TripleSet extends HashSet<RdfTriple> implements RdfGraph {
+public record Variable(String id) implements RdfResource {
 
-    private static final long serialVersionUID = -6850516669568590411L;
+    public Variable {
+        id = Objects.requireNonNull(id);
 
-    @Override
-    public Stream<RdfTriple> stream() {
-        return super.stream();
+        if (id.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Variable id must be non empty string, but was id=" + id + ".");
+        }
+
+        if (id.startsWith("_:")) {
+            id = id.substring(2);
+        }
     }
 
     @Override
-    public boolean contains(RdfTriple triple) {
-        return super.contains(triple);
+    public boolean isBlankNode() {
+        return true;
     }
 
     @Override
-    public boolean remove(RdfTriple triple) {
-        return super.remove(triple);
+    public String toString() {
+        return "_:" + id;
     }
 }

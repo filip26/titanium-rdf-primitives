@@ -59,10 +59,10 @@ public interface RdfTriple extends RdfTerm {
      * The predicate is an absolute IRI that specifies the property or relationship
      * between the subject and the object of the triple.
      *
-     * @return a {@link RdfResource} representing the predicate of the triple; never
+     * @return an URI representing the predicate of the triple; never
      *         {@code null}
      */
-    RdfResource predicate();
+    String predicate();
 
     /**
      * Returns the object of the triple.
@@ -78,14 +78,4 @@ public interface RdfTriple extends RdfTerm {
      *         {@code null}
      */
     RdfTerm object();
-
-    @Override
-    default boolean isTriple() {
-        return true;
-    }
-
-    @Override
-    default RdfTriple asTriple() {
-        return this;
-    }
 }

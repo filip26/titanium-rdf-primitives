@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URISyntaxException;
+import java.util.LinkedHashSet;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.params.ParameterizedTest;
@@ -33,14 +34,15 @@ import org.junit.jupiter.params.provider.MethodSource;
 import com.apicatalog.rdf.NQuadsTestCase.Type;
 import com.apicatalog.rdf.api.RdfConsumerException;
 import com.apicatalog.rdf.model.RdfDataset;
-import com.apicatalog.rdf.model.RdfQuadSet;
+import com.apicatalog.rdf.model.RdfQuad;
 import com.apicatalog.rdf.nquads.NQuadsReader;
 import com.apicatalog.rdf.nquads.NQuadsReaderException;
 import com.apicatalog.rdf.nquads.NQuadsWriter;
-import com.apicatalog.rdf.primitive.flow.QuadAcceptor;
-import com.apicatalog.rdf.primitive.flow.QuadEmitter;
-import com.apicatalog.rdf.primitive.set.OrderedQuadDataset;
-import com.apicatalog.rdf.primitive.set.OrderedQuadSet;
+import com.apicatalog.rdf.primitive.QuadDataset;
+import com.apicatalog.rdf.provider.DatasetProvider;
+import com.apicatalog.rdf.provider.OrderedDataset;
+import com.apicatalog.rdf.provider.QuadEmitter;
+import com.apicatalog.rdf.provider.QuadSetProvider;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
@@ -64,16 +66,13 @@ class ReadWriteTest {
             final String input = isToString(is);
             assertNotNull(input);
 
-            final QuadAcceptor datasetProvider = new QuadAcceptor(new OrderedQuadSet());
-            new NQuadsReader(new StringReader(input)).provide(datasetProvider);
-
-            final RdfQuadSet dataset = datasetProvider.get();
-
-            assertNotNull(dataset);
+            var quads = new LinkedHashSet<RdfQuad>();
+            
+            new NQuadsReader(new StringReader(input)).provide(new QuadSetProvider(quads));
 
             final StringWriter writer = new StringWriter();
 
-            QuadEmitter.emit(new NQuadsWriter(writer), dataset);
+            QuadEmitter.emit(new NQuadsWriter(writer), quads);
 
             final String result = writer.toString();
             assertNotNull(result);
@@ -118,9 +117,9 @@ class ReadWriteTest {
             final String input = isToString(is);
             assertNotNull(input);
 
-            final OrderedQuadDataset dataset = new OrderedQuadDataset();
-            final QuadAcceptor datasetProvider = new QuadAcceptor(dataset);
-            new NQuadsReader(new StringReader(input)).provide(datasetProvider);
+            final var dataset = new QuadDataset();
+            final var provider = new DatasetProvider(dataset);
+            new NQuadsReader(new StringReader(input)).provide(provider);
 
             assertNotNull(dataset);
 

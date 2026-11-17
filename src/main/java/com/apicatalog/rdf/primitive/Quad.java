@@ -23,7 +23,7 @@ import com.apicatalog.rdf.model.RdfTerm;
 
 public record Quad(
         RdfResource subject,
-        RdfResource predicate,
+        String predicate,
         RdfTerm object,
         RdfResource graph) implements RdfQuad {
 
@@ -31,7 +31,6 @@ public record Quad(
         subject = Objects.requireNonNull(subject, "Quad subject must not be null.");
         predicate = Objects.requireNonNull(predicate, "Quad predicate must not be null.");
         object = Objects.requireNonNull(object, "Quad object must not be null.");
-        graph = Objects.requireNonNull(graph, "Quad graph must not be null.");
     }
 
     @Override

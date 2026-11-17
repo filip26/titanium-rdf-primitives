@@ -15,26 +15,26 @@ public class TermHashMap extends HashMap<String, RdfTerm> implements RdfTermFact
     private static final long serialVersionUID = 560481899503078382L;
 
     @Override
-    public RdfResource createBlankNode(String value) {
+    public RdfResource createVariable(String id) {
         return (RdfResource) super.computeIfAbsent(
-                Resource.key(value, true),
-                key -> Resource.createBlankNode(value, key));
+                id,
+                Variable::new);
     }
 
     @Override
-    public RdfResource createIRI(String value) {
+    public RdfResource createResource(String uri) {
         return (RdfResource) super.computeIfAbsent(
-                Resource.key(value, false),
-                key -> Resource.createIRI(value, key));
+                uri,
+                Resource::new);
     }
 
     @Override
-    public RdfTriple createTriple(RdfResource subject, RdfResource predicate, RdfTerm object) {
+    public RdfTriple createTriple(RdfResource subject, String predicate, RdfTerm object) {
         return new Triple(subject, predicate, object);
     }
 
     @Override
-    public RdfQuad createQuad(RdfResource subject, RdfResource predicate, RdfTerm object, RdfResource graph) {
+    public RdfQuad createQuad(RdfResource subject, String predicate, RdfTerm object, RdfResource graph) {
         return new Quad(subject, predicate, object, graph);
     }
 

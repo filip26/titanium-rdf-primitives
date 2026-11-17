@@ -30,95 +30,9 @@ package com.apicatalog.rdf.model;
  * of RDF term, as well as casting methods that allow safe access to the
  * underlying representation.
  *
- * @see <a href="https://www.w3.org/TR/rdf11-concepts/#dfn-rdf-term">RDF 1.1
- *      Term</a>
- * @see <a href="https://www.w3.org/TR/rdf12-concepts/#section-rdf-star">RDF 1.2
- *      (RDF-star)</a>
+ * @see <a href="https://www.w3.org/TR/rdf12-concepts/#section-terms">RDF Terms</a>
  */
 public interface RdfTerm {
-
-    /**
-     * Indicates whether this term is an RDF literal.
-     *
-     * @return {@code true} if the term is an {@link RdfLiteral}; {@code false}
-     *         otherwise.
-     */
-    default boolean isLiteral() {
-        return false;
-    }
-
-    /**
-     * Indicates whether this term is a resource, which includes absolute IRIs and
-     * blank node identifiers.
-     *
-     * @return {@code true} if the term is an {@link RdfResource}; {@code false}
-     *         otherwise.
-     */
-    default boolean isResource() {
-        return false;
-    }
-
-    /**
-     * Indicates whether this term is an RDF triple.
-     * <p>
-     * RDF triples are supported for RDF-star (RDF 1.2) compatibility.
-     *
-     * @return {@code true} if the term is an {@link RdfTriple}; {@code false}
-     *         otherwise.
-     */
-    default boolean isTriple() {
-        return false;
-    }
-
-    /**
-     * Indicates whether this term is a collection.
-     *
-     * @return {@code true} if the term is an {@link RdfList}; {@code false}
-     *         otherwise.
-     */
-    default boolean isList() {
-        return false;
-    }
-
-    /**
-     * Returns this term as an {@link RdfLiteral}.
-     *
-     * @return the {@link RdfLiteral} representation of this term.
-     * @throws ClassCastException if this term is not an {@link RdfLiteral}.
-     */
-    default RdfLiteral asLiteral() {
-        throw new ClassCastException();
-    }
-
-    /**
-     * Returns this term as an {@link RdfResource}.
-     *
-     * @return the {@link RdfResource} representation of this term.
-     * @throws ClassCastException if this term is not an {@link RdfResource}.
-     */
-    default RdfResource asResource() {
-        throw new ClassCastException();
-    }
-
-    /**
-     * Returns this term as an {@link RdfTriple}.
-     *
-     * @return the {@link RdfTriple} representation of this term.
-     * @throws ClassCastException if this term is not an {@link RdfTriple}.
-     */
-    default RdfTriple asTriple() {
-        throw new ClassCastException();
-    }
-
-    /**
-     * Returns this term as an {@link RdfList}.
-     *
-     * @return the {@link RdfList} representation of this term.
-     * @throws ClassCastException if this term is not an {@link RdfList}.
-     */
-    default RdfList asList() {
-        throw new ClassCastException();
-    }
 
     /**
      * Compares this RDF term to the specified object. Implementations must override

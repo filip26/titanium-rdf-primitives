@@ -28,6 +28,7 @@ import java.util.stream.Stream;
  * Implementations of this interface may optionally support adding or removing
  * quads.
  */
+@Deprecated
 public interface RdfQuadSet {
 
     /**

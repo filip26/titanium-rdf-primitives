@@ -23,7 +23,7 @@ import com.apicatalog.rdf.model.RdfTriple;
 
 public record Triple(
         RdfResource subject,
-        RdfResource predicate,
+        String predicate,
         RdfTerm object) implements RdfTriple {
 
     public Triple {
@@ -44,15 +44,18 @@ public record Triple(
                 .toString();
     }
 
-    static final StringBuilder printTriple(StringBuilder builder, RdfResource subject, RdfResource predicate,
+    static final StringBuilder printTriple(
+            StringBuilder builder,
+            RdfResource subject,
+            String predicate,
             RdfTerm object) {
         builder.append(subject)
                 .append(',')
                 .append(predicate)
                 .append(',');
 
-        if (object.isTriple()) {
-            return printTripleTerm(builder, object.asTriple());
+        if (object instanceof RdfTriple triple) {
+            return printTripleTerm(builder, triple);
         }
 
         return builder.append(object);

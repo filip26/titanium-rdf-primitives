@@ -14,26 +14,23 @@ import com.apicatalog.rdf.model.RdfLiteral.Direction;
 public interface RdfTermFactory {
 
     /**
-     * Creates a blank node with the specified value.
+     * Creates a blank node with the specified id.
      * <p>
      * A blank node is an anonymous resource that does not have an IRI.
      * 
-     * @param value the value of the blank node (usually a string identifier)
+     * @param id the blank node identified
      * @return {@link RdfResource} representing the blank node
      */
-    RdfResource createBlankNode(String value);
+    RdfResource createVariable(String id);
 
     /**
-     * Creates an IRI (Internationalized Resource Identifier) with the specified
-     * value.
-     * <p>
-     * An IRI is a globally unique identifier used to refer to a resource.
+     * Creates a node identified with an absolute URI.
      * 
-     * @param value the value of the IRI (usually a URI string)
-     * @return {@link RdfResource} representing the IRI
+     * @param uri the value of the URI 
+     * @return {@link RdfResource} identified by the URI
      */
-    RdfResource createIRI(String value);
-
+    RdfResource createResource(String uri);
+    
     /**
      * Creates a triple consisting of a subject, predicate, and object.
      * <p>
@@ -41,11 +38,11 @@ public interface RdfTermFactory {
      * predicate, and object.
      * 
      * @param subject   the subject of the triple, must be a {@link RdfResource}
-     * @param predicate the predicate of the triple, must be a {@link RdfResource}
+     * @param predicate the predicate of the triple
      * @param object    the object of the triple, can be any {@link RdfTerm}
      * @return {@link RdfTriple} representing the RDF triple
      */
-    RdfTriple createTriple(RdfResource subject, RdfResource predicate, RdfTerm object);
+    RdfTriple createTriple(RdfResource subject, String predicate, RdfTerm object);
 
     /**
      * Creates a quad consisting of a subject, predicate, object, and graph.
@@ -54,12 +51,12 @@ public interface RdfTermFactory {
      * allowing RDF data to be associated with a specific graph.
      * 
      * @param subject   the subject of the quad, must be a {@link RdfResource}
-     * @param predicate the predicate of the quad, must be a {@link RdfResource}
+     * @param predicate the predicate of the quad
      * @param object    the object of the quad, can be any {@link RdfTerm}
      * @param graph     the graph name for the quad, must be a {@link RdfResource}
      * @return {@link RdfQuad} representing the RDF quad
      */
-    RdfQuad createQuad(RdfResource subject, RdfResource predicate, RdfTerm object, RdfResource graph);
+    RdfQuad createQuad(RdfResource subject, String predicate, RdfTerm object, RdfResource graph);
 
     /**
      * Creates an RDF literal with the specified lexical value and datatype.
