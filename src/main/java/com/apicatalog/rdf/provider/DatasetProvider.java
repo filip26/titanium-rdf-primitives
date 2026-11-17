@@ -2,7 +2,6 @@ package com.apicatalog.rdf.provider;
 
 import java.util.function.Supplier;
 
-import com.apicatalog.rdf.api.RdfConsumerException;
 import com.apicatalog.rdf.api.RdfQuadConsumer;
 import com.apicatalog.rdf.model.RdfDataset;
 import com.apicatalog.rdf.model.RdfLiteral.Direction;
@@ -49,14 +48,14 @@ public class DatasetProvider implements RdfQuadConsumer, Supplier<RdfDataset> {
     }
 
     @Override
-    public DatasetProvider quad(
+    public void quad(
             String subject,
             String predicate,
             String object,
             String datatype,
             String language,
             String direction,
-            String graph) throws RdfConsumerException {
+            String graph) {
 
         final RdfTerm objectValue;
 
@@ -82,8 +81,6 @@ public class DatasetProvider implements RdfQuadConsumer, Supplier<RdfDataset> {
                 graph != null
                         ? terms.createResource(graph)
                         : null);
-
-        return this;
     }
 
     public RdfTerm.Factory terms() {

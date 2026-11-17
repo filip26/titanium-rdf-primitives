@@ -6,7 +6,6 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import com.apicatalog.rdf.api.RdfConsumerException;
 import com.apicatalog.rdf.api.RdfQuadConsumer;
 import com.apicatalog.rdf.model.RdfLiteral.Direction;
 import com.apicatalog.rdf.model.RdfTerm;
@@ -53,14 +52,14 @@ public class NodeMapProvider implements RdfQuadConsumer, Supplier<Map<String, No
 //    }
 
     @Override
-    public NodeMapProvider quad(
+    public void quad(
             String subject,
             String predicate,
             String object,
             String datatype,
             String language,
             String direction,
-            String graph) throws RdfConsumerException {
+            String graph) {
 
         final RdfTerm objectValue;
 
@@ -87,8 +86,6 @@ public class NodeMapProvider implements RdfQuadConsumer, Supplier<Map<String, No
 //                Optional.ofNullable(graph)
 //                        .map(this::getNode)
 //                        .orElse(null));
-
-        return this;
     }
 
     public RdfTerm.Factory terms() {

@@ -30,11 +30,15 @@ public class Dataset implements RdfDataset {
     protected Set<RdfTriple> defaultGraph;
 
     /** named graphs index */
-    protected Map<RdfResource, Set<RdfTriple>> graphs;
+    protected final Map<RdfResource, Set<RdfTriple>> graphs;
 
     public Dataset() {
-        this.graphs = new HashMap<>();
-        this.defaultGraph = Set.of();
+        this(Set.of(), new HashMap<>());
+    }
+
+    protected Dataset(Set<RdfTriple> defaultGraph, Map<RdfResource, Set<RdfTriple>> graphs) {
+        this.graphs = graphs;
+        this.defaultGraph = defaultGraph;
     }
 
     @Override
@@ -74,7 +78,12 @@ public class Dataset implements RdfDataset {
 
     @Override
     public void defaultGraph(Set<RdfTriple> graph) {
-        defaultGraph = new HashSet<RdfTriple>(graph);
+        defaultGraph = new HashSet<>(graph);
+    }
+
+    @Override
+    public void namedGraph(RdfResource graphName, Set<RdfTriple> graph) {
+        graphs.put(graphName, new HashSet<>(graph));
     }
 
 }

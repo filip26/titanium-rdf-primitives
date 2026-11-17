@@ -32,8 +32,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import com.apicatalog.rdf.NQuadsTestCase.Type;
-import com.apicatalog.rdf.api.RdfConsumerException;
-import com.apicatalog.rdf.model.RdfDataset;
 import com.apicatalog.rdf.model.RdfQuad;
 import com.apicatalog.rdf.nquads.NQuadsReader;
 import com.apicatalog.rdf.nquads.NQuadsReaderException;
@@ -100,7 +98,7 @@ class ReadWriteTest {
 
             assertTrue(match);
 
-        } catch (IllegalArgumentException | NQuadsReaderException | RdfConsumerException e) {
+        } catch (IllegalArgumentException | NQuadsReaderException e) {
             assertEquals(Type.NEGATIVE, testCase.getType());
         }
     }
@@ -153,7 +151,7 @@ class ReadWriteTest {
 
             assertTrue(match);
 
-        } catch (IllegalArgumentException | NQuadsReaderException | RdfConsumerException e) {
+        } catch (IllegalArgumentException | NQuadsReaderException e) {
             assertEquals(Type.NEGATIVE, testCase.getType());
         }
     }

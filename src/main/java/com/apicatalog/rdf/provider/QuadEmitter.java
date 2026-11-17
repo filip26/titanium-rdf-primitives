@@ -3,7 +3,6 @@ package com.apicatalog.rdf.provider;
 import java.util.Optional;
 import java.util.Set;
 
-import com.apicatalog.rdf.api.RdfConsumerException;
 import com.apicatalog.rdf.api.RdfQuadConsumer;
 import com.apicatalog.rdf.model.RdfDataset;
 import com.apicatalog.rdf.model.RdfLiteral;
@@ -25,33 +24,32 @@ public class QuadEmitter {
         return new QuadEmitter(consumer);
     }
 
-    public QuadEmitter emit(RdfDataset set) throws RdfConsumerException {
+    public QuadEmitter emit(RdfDataset set) {
         emit(consumer, set);
         return this;
     }
 
-    public QuadEmitter emit(Set<RdfTriple> graph, RdfResource graphName) throws RdfConsumerException {
+    public QuadEmitter emit(Set<RdfTriple> graph, RdfResource graphName) {
         emit(consumer, graph, graphName);
         return this;
     }
 
-    public QuadEmitter emit(Set<RdfQuad> quads) throws RdfConsumerException {
+    public QuadEmitter emit(Set<RdfQuad> quads) {
         emit(consumer, quads);
         return this;
     }
 
-    public QuadEmitter emit(RdfQuad quad) throws RdfConsumerException {
+    public QuadEmitter emit(RdfQuad quad) {
         emit(consumer, quad);
         return this;
     }
 
-    public QuadEmitter emit(RdfResource subject, String predicate, RdfTerm object, RdfResource graph)
-            throws RdfConsumerException {
+    public QuadEmitter emit(RdfResource subject, String predicate, RdfTerm object, RdfResource graph) {
         emit(consumer, subject, predicate, object, graph);
         return this;
     }
 
-    public static void emit(RdfQuadConsumer consumer, RdfDataset set) throws RdfConsumerException {
+    public static void emit(RdfQuadConsumer consumer, RdfDataset set) {
         Set<RdfTriple> graph = set.defaultGraph();
         if (graph != null) {
             emit(consumer, graph, null);
@@ -64,20 +62,19 @@ public class QuadEmitter {
         }
     }
 
-    public static void emit(RdfQuadConsumer consumer, Set<RdfTriple> graph, RdfResource graphName)
-            throws RdfConsumerException {
+    public static void emit(RdfQuadConsumer consumer, Set<RdfTriple> graph, RdfResource graphName) {
         for (var triple : graph) {
             emit(consumer, triple.subject(), triple.predicate(), triple.object(), graphName);
         }
     }
 
-    public static void emit(RdfQuadConsumer consumer, Set<RdfQuad> quads) throws RdfConsumerException {
+    public static void emit(RdfQuadConsumer consumer, Set<RdfQuad> quads) {
         for (var quad : quads) {
             emit(consumer, quad);
         }
     }
 
-    public static void emit(RdfQuadConsumer consumer, RdfQuad quad) throws RdfConsumerException {
+    public static void emit(RdfQuadConsumer consumer, RdfQuad quad) {
         emit(consumer,
                 quad.subject(),
                 quad.predicate(),
@@ -90,7 +87,7 @@ public class QuadEmitter {
             RdfResource subject,
             String predicate,
             RdfTerm object,
-            RdfResource graph) throws RdfConsumerException {
+            RdfResource graph) {
 
         if (object instanceof RdfLiteral literal) {
             consumer.quad(

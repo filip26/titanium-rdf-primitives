@@ -6,30 +6,23 @@
     <groupId>com.apicatalog</groupId>
     <artifactId>titanium-rdf-primitives</artifactId>
     <version>2.0.0-SNAPSHOT</version>
+
     <packaging>jar</packaging>
+
     <url>https://github.com/filip26/titanium-rdf-primitives</url>
+
     <scm>
         <connection>scm:git:git://github.com/filip26/titanium-rdf-primitives.git</connection>
         <developerConnection>
             scm:git:git://github.com/filip26/titanium-rdf-primitives.git</developerConnection>
         <url>https://github.com/filip26/titanium-rdf-primitives/tree/main</url>
     </scm>
-    <properties>
-        <maven.compiler.release>21</maven.compiler.release>
-
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <argLine>-Dfile.encoding=UTF-8</argLine>
-        
-        <!--  test resources -->
-        <jakarta.json.version>2.0.1</jakarta.json.version>
-        <junit.version>6.0.1</junit.version>
-    </properties>
 
     <name>Titanium RDF Primitives</name>
 
     <description>
-      RDF primitives, Quad, Triple, Graph, Literal, LangString, ... (formerly part of Titanium JSON-LD)
+        Core RDF 1.1 and 1.2 data primitives: Dataset, Quad, Triple, Literal,
+        and LangString.
     </description>
 
     <licenses>
@@ -57,13 +50,28 @@
 
     <inceptionYear>2020</inceptionYear>
 
+    <properties>
+        <maven.compiler.release>21</maven.compiler.release>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <argLine>-Dfile.encoding=UTF-8</argLine>
+
+        <rdf.api.version>2.0.1</rdf.api.version>
+
+        <!--  test resources -->
+        <nquads.version>2.0.1</nquads.version>
+        <jakarta.json.version>2.0.1</jakarta.json.version>
+        <junit.version>6.1.3</junit.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.apicatalog</groupId>
             <artifactId>titanium-rdf-api</artifactId>
-            <version>1.0.0</version>
-        </dependency>     
-        <!--  Tests -->        
+            <version>${rdf.api.version}</version>
+        </dependency>
+        <!--  Tests -->
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>jakarta.json</artifactId>
@@ -73,9 +81,9 @@
         <dependency>
             <groupId>com.apicatalog</groupId>
             <artifactId>titanium-rdf-n-quads</artifactId>
-            <version>1.0.2</version>
+            <version>${nquads.version}</version>
             <scope>test</scope>
-        </dependency>           
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -178,24 +186,17 @@
                         </executions>
                     </plugin>
                     <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.7.0</version>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.12.0</version>
                         <extensions>true</extensions>
                         <configuration>
-                            <serverId>ossrh</serverId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                            <publishingServerId>central</publishingServerId>
+                            <autoPublish>true</autoPublish>
                         </configuration>
                     </plugin>
                 </plugins>
             </build>
-            <distributionManagement>
-                <snapshotRepository>
-                    <id>ossrh</id>
-                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-                </snapshotRepository>
-            </distributionManagement>
         </profile>
     </profiles>
 </project>
