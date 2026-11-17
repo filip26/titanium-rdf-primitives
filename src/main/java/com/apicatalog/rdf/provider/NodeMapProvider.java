@@ -2,7 +2,6 @@ package com.apicatalog.rdf.provider;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -10,31 +9,29 @@ import java.util.function.Supplier;
 import com.apicatalog.rdf.api.RdfConsumerException;
 import com.apicatalog.rdf.api.RdfQuadConsumer;
 import com.apicatalog.rdf.model.RdfLiteral.Direction;
-import com.apicatalog.rdf.model.RdfResource;
 import com.apicatalog.rdf.model.RdfTerm;
-import com.apicatalog.rdf.model.RdfTermFactory;
 import com.apicatalog.rdf.primitive.Node;
-import com.apicatalog.rdf.primitive.TermHashMap;
+import com.apicatalog.rdf.primitive.TermMap;
 
 public class NodeMapProvider implements RdfQuadConsumer, Supplier<Map<String, Node>> {
 
-    protected final RdfTermFactory terms;
+    protected final RdfTerm.Factory terms;
     protected final Map<String, Node> nodes;
     protected Function<String, String> blankNodeIssuer;
 
     public NodeMapProvider() {
-        this(new HashMap<String, Node>(), new TermHashMap());
+        this(new HashMap<String, Node>(), new TermMap());
     }
 
     public NodeMapProvider(final Map<String, Node> nodes) {
-        this(nodes, new TermHashMap());
+        this(nodes, new TermMap());
     }
 
-    public NodeMapProvider(final RdfTermFactory terms) {
+    public NodeMapProvider(final RdfTerm.Factory terms) {
         this(new HashMap<String, Node>(), terms);
     }
 
-    public NodeMapProvider(final  Map<String, Node> nodes, final RdfTermFactory terms) {
+    public NodeMapProvider(final  Map<String, Node> nodes, final RdfTerm.Factory terms) {
         this.nodes = nodes;
         this.terms = terms;
         this.blankNodeIssuer = Function.identity();
@@ -81,7 +78,7 @@ public class NodeMapProvider implements RdfQuadConsumer, Supplier<Map<String, No
             objectValue = terms.createLiteral(object, datatype);
 
         } else {
-            objectValue = getNode(object);
+            objectValue = terms.createResource(object);
         }
 
 //        quad(getNode(subject),
@@ -94,18 +91,7 @@ public class NodeMapProvider implements RdfQuadConsumer, Supplier<Map<String, No
         return this;
     }
 
-    public RdfTermFactory terms() {
+    public RdfTerm.Factory terms() {
         return terms;
-    }
-
-    public void blankNodeIssuer(Function<String, String> blankNodeIssuer) {
-        this.blankNodeIssuer = Objects.requireNonNull(blankNodeIssuer);
-    }
-
-    protected final RdfResource getNode(final String id) {
-        if (RdfQuadConsumer.isBlank(id)) {
-            return terms.createVariable(blankNodeIssuer.apply(id.substring(2)));
-        }
-        return terms.createResource(id);
     }
 }

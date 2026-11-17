@@ -1,31 +1,35 @@
 package com.apicatalog.rdf.primitive;
 
 import java.util.HashMap;
+import java.util.Objects;
+import java.util.function.Function;
 
+import com.apicatalog.rdf.api.RdfQuadConsumer;
 import com.apicatalog.rdf.model.RdfLiteral;
 import com.apicatalog.rdf.model.RdfLiteral.Direction;
 import com.apicatalog.rdf.model.RdfQuad;
 import com.apicatalog.rdf.model.RdfResource;
 import com.apicatalog.rdf.model.RdfTerm;
-import com.apicatalog.rdf.model.RdfTermFactory;
 import com.apicatalog.rdf.model.RdfTriple;
 
-public class TermHashMap extends HashMap<String, RdfTerm> implements RdfTermFactory {
+public class TermMap extends HashMap<String, RdfTerm> implements RdfTerm.Factory {
 
     private static final long serialVersionUID = 560481899503078382L;
 
-    @Override
-    public RdfResource createVariable(String id) {
-        return (RdfResource) super.computeIfAbsent(
-                id,
-                Variable::new);
-    }
+    protected Function<String, String> blankNodeIssuer = Function.identity();
 
     @Override
-    public RdfResource createResource(String uri) {
+    public RdfResource createResource(String id) {
+
+        if (RdfQuadConsumer.isBlank(id)) {
+            return (RdfResource) super.computeIfAbsent(
+                    blankNodeIssuer.apply(id.substring(2)),
+                    key -> new Resource(key, true));
+        }
+
         return (RdfResource) super.computeIfAbsent(
-                uri,
-                Resource::new);
+                id,
+                key -> new Resource(key, false));
     }
 
     @Override
@@ -46,5 +50,9 @@ public class TermHashMap extends HashMap<String, RdfTerm> implements RdfTermFact
     @Override
     public RdfLiteral createLangString(String lexicalValue, String datatype, String langTag, Direction direction) {
         return new LangString(lexicalValue, datatype, langTag, direction);
+    }
+
+    public void blankNodeIssuer(Function<String, String> blankNodeIssuer) {
+        this.blankNodeIssuer = Objects.requireNonNull(blankNodeIssuer);
     }
 }

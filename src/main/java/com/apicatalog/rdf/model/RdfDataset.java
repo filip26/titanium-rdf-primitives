@@ -15,7 +15,6 @@
  */
 package com.apicatalog.rdf.model;
 
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -46,27 +45,25 @@ public interface RdfDataset {
      * The default graph is the unnamed graph in the dataset. It contains RDF
      * triples that are not part of any named graph.
      *
-     * @return an immutable {@link Set} of {@link RdfTriple} representing the
-     *         default graph; or {@code null}
+     * @return an immutable set of {@link RdfTriple} representing the default graph;
+     *         or {@code null}
      */
     Set<RdfTriple> defaultGraph();
 
     /**
      * Returns the set of graph names for all named graphs in the dataset.
      * <p>
-     * Each name is represented as a {@link RdfResource}, which can be an IRI or a
-     * blank node identifier.
+     * Each name is represented as an IRI or a blank node identifier.
      *
-     * @return an immutable {@link Set} of {@link RdfResource} graph names; empty if
-     *         no named graphs are present.
+     * @return an immutable set of graph names; empty if no named graphs are
+     *         present.
      */
     Set<RdfResource> graphNames();
 
     /**
      * Returns the named graph corresponding to the provided graph name.
      * <p>
-     * If the dataset does not contain a named graph with the specified name, an
-     * empty {@link Optional} is returned.
+     * If the dataset does not contain a named graph with the specified name, otherwise, {@code null}
      *
      * @param graphName the URI or blank node id identifying the named graph
      * @return an immutable {@link Set} containing the {@link RdfTriple} if present;

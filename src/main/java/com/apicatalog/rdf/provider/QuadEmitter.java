@@ -35,10 +35,10 @@ public class QuadEmitter {
         return this;
     }
 
-//    public QuadEmitter emit(RdfQuadSet set) throws RdfConsumerException {
-//        emit(consumer, set);
-//        return this;
-//    }
+    public QuadEmitter emit(Set<RdfQuad> quads) throws RdfConsumerException {
+        emit(consumer, quads);
+        return this;
+    }
 
     public QuadEmitter emit(RdfQuad quad) throws RdfConsumerException {
         emit(consumer, quad);

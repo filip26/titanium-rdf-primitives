@@ -19,7 +19,7 @@ import java.util.Objects;
 
 import com.apicatalog.rdf.model.RdfResource;
 
-public record Resource(String id) implements RdfResource {
+public record Resource(String id, boolean isBlankNode) implements RdfResource {
 
     public Resource {
         id = Objects.requireNonNull(id);
@@ -28,20 +28,10 @@ public record Resource(String id) implements RdfResource {
             throw new IllegalArgumentException(
                     "Resource id must be non empty string, but was id=" + id + ".");
         }
-
-        if (id.startsWith("_:")) {
-            throw new IllegalArgumentException(
-                    "Expected an absolute URI, but was id=" + id + ".");
-        }
-    }
-
-    @Override
-    public boolean isBlankNode() {
-        return false;
     }
 
     @Override
     public String toString() {
-        return '<' + id + '>';
+        return id;
     }
 }

@@ -38,9 +38,8 @@ import com.apicatalog.rdf.model.RdfQuad;
 import com.apicatalog.rdf.nquads.NQuadsReader;
 import com.apicatalog.rdf.nquads.NQuadsReaderException;
 import com.apicatalog.rdf.nquads.NQuadsWriter;
-import com.apicatalog.rdf.primitive.QuadDataset;
+import com.apicatalog.rdf.primitive.Dataset;
 import com.apicatalog.rdf.provider.DatasetProvider;
-import com.apicatalog.rdf.provider.OrderedDataset;
 import com.apicatalog.rdf.provider.QuadEmitter;
 import com.apicatalog.rdf.provider.QuadSetProvider;
 
@@ -61,13 +60,14 @@ class ReadWriteTest {
         assertNotNull(testCase.getName());
         assertNotNull(testCase.getType());
 
-        try (final InputStream is = ReadWriteTest.class.getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".nq")) {
+        try (final InputStream is = ReadWriteTest.class
+                .getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".nq")) {
 
             final String input = isToString(is);
             assertNotNull(input);
 
             var quads = new LinkedHashSet<RdfQuad>();
-            
+
             new NQuadsReader(new StringReader(input)).provide(new QuadSetProvider(quads));
 
             final StringWriter writer = new StringWriter();
@@ -81,7 +81,8 @@ class ReadWriteTest {
 
             String expected = input;
 
-            try (final InputStream out = ReadWriteTest.class.getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".out.nq")) {
+            try (final InputStream out = ReadWriteTest.class
+                    .getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".out.nq")) {
                 if (out != null) {
                     expected = isToString(out);
                 }
@@ -112,12 +113,13 @@ class ReadWriteTest {
         assertNotNull(testCase.getName());
         assertNotNull(testCase.getType());
 
-        try (final InputStream is = ReadWriteTest.class.getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".nq")) {
+        try (final InputStream is = ReadWriteTest.class
+                .getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".nq")) {
 
             final String input = isToString(is);
             assertNotNull(input);
 
-            final var dataset = new QuadDataset();
+            final var dataset = new Dataset(LinkedHashSet::new);
             final var provider = new DatasetProvider(dataset);
             new NQuadsReader(new StringReader(input)).provide(provider);
 
@@ -125,7 +127,7 @@ class ReadWriteTest {
 
             final StringWriter writer = new StringWriter();
 
-            QuadEmitter.emit(new NQuadsWriter(writer), (RdfDataset)dataset);
+            QuadEmitter.emit(new NQuadsWriter(writer), (RdfDataset) dataset);
 
             final String result = writer.toString();
             assertNotNull(result);
@@ -134,7 +136,8 @@ class ReadWriteTest {
 
             String expected = input;
 
-            try (final InputStream out = ReadWriteTest.class.getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".out.nq")) {
+            try (final InputStream out = ReadWriteTest.class
+                    .getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".out.nq")) {
                 if (out != null) {
                     expected = isToString(out);
                 }
@@ -156,6 +159,7 @@ class ReadWriteTest {
             assertEquals(Type.NEGATIVE, testCase.getType());
         }
     }
+
     static final Stream<NQuadsTestCase> data() throws IOException {
         return load(TEST_CASE_BASE_PATH, "manifest.json");
     }

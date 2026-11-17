@@ -15,26 +15,35 @@
  */
 package com.apicatalog.rdf.primitive;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import com.apicatalog.rdf.model.RdfDataset;
 import com.apicatalog.rdf.model.RdfResource;
 import com.apicatalog.rdf.model.RdfTriple;
 
-public final class QuadDataset implements RdfDataset {
+public class Dataset implements RdfDataset {
 
-    private Set<RdfTriple> defaultGraph;
+    protected Set<RdfTriple> defaultGraph;
 
     /** named graphs index */
-    private Map<RdfResource, Set<RdfTriple>> graphs;
+    protected Map<RdfResource, Set<RdfTriple>> graphs;
+    
+    protected Supplier<Set<RdfTriple>> factory;
 
-    public QuadDataset() {
+    public Dataset() {
+        this(HashSet::new);
+    }
+    
+   public Dataset(Supplier<Set<RdfTriple>> factory) {
         this.graphs = Map.of();
         this.defaultGraph = Set.of();
+        this.factory = factory;
     }
-
+   
     @Override
     public Set<RdfTriple> defaultGraph() {
         return defaultGraph;
@@ -45,34 +54,26 @@ public final class QuadDataset implements RdfDataset {
 
         Objects.requireNonNull(triple);
 
-//        // is named graph?
-//        if (graphName != null) {
-//
-//            var graph = graphs.get(graphName);
-//
-//            if (graph == null) {
-//
-//                graph = ;
-//                graphs.put(graphName, graph);
-//                graph.add(nquad);
-//                return super.add(nquad);
-//
-//            } else if (!graph.contains(nquad)) {
-//
-//                graph.add(nquad);
-//                return super.add(nquad);
-//            }
-//
-//        } else {
-//            // then it's default graph
-//
-//            if (!defaultGraph.contains(nquad)) {
-//                // add to default graph
-//                defaultGraph.add(nquad);
-//                return super.add(nquad);
-//            }
-//        }
-//        return false;
+        // is named graph?
+        if (graphName != null) {
+
+            var graph = graphs.get(graphName);
+
+            if (graph == null) {
+                graph = factory.get();
+                graphs.put(graphName, graph);
+            }
+            graph.add(triple);
+
+        } else {
+            // then it's default graph
+            if (defaultGraph.isEmpty()) {
+                defaultGraph = factory.get();
+            }
+
+            // add to default graph
+            defaultGraph.add(triple);
+        }
     }
 
     @Override
@@ -84,5 +85,5 @@ public final class QuadDataset implements RdfDataset {
     public Set<RdfTriple> namedGraph(RdfResource graphName) {
         return graphs.get(graphName);
     }
-    
+
 }

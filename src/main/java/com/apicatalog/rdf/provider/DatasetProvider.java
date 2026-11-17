@@ -1,46 +1,37 @@
 package com.apicatalog.rdf.provider;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.apicatalog.rdf.api.RdfConsumerException;
 import com.apicatalog.rdf.api.RdfQuadConsumer;
 import com.apicatalog.rdf.model.RdfDataset;
 import com.apicatalog.rdf.model.RdfLiteral.Direction;
-import com.apicatalog.rdf.model.RdfQuad;
 import com.apicatalog.rdf.model.RdfResource;
 import com.apicatalog.rdf.model.RdfTerm;
-import com.apicatalog.rdf.model.RdfTermFactory;
 import com.apicatalog.rdf.model.RdfTriple;
-import com.apicatalog.rdf.primitive.QuadDataset;
-import com.apicatalog.rdf.primitive.TermHashMap;
+import com.apicatalog.rdf.primitive.Dataset;
+import com.apicatalog.rdf.primitive.TermMap;
 
 public class DatasetProvider implements RdfQuadConsumer, Supplier<RdfDataset> {
 
-    protected final RdfTermFactory terms;
+    protected final RdfTerm.Factory terms;
     protected final RdfDataset dataset;
-    protected Function<String, String> blankNodeIssuer;
 
     public DatasetProvider() {
-        this(new QuadDataset(), new TermHashMap());
+        this(new Dataset(), new TermMap());
     }
 
     public DatasetProvider(final RdfDataset quads) {
-        this(quads, new TermHashMap());
+        this(quads, new TermMap());
     }
 
-    public DatasetProvider(final RdfTermFactory terms) {
-        this(new QuadDataset(), terms);
+    public DatasetProvider(final RdfTerm.Factory terms) {
+        this(new Dataset(), terms);
     }
 
-    public DatasetProvider(final RdfDataset quads, final RdfTermFactory terms) {
+    public DatasetProvider(final RdfDataset quads, final RdfTerm.Factory terms) {
         this.dataset = quads;
         this.terms = terms;
-        this.blankNodeIssuer = Function.identity();
     }
 
     @Override
@@ -74,40 +65,28 @@ public class DatasetProvider implements RdfQuadConsumer, Supplier<RdfDataset> {
                     object,
                     datatype,
                     language,
-                    Optional.ofNullable(direction)
-                            .map(String::toUpperCase)
-                            .map(Direction::valueOf)
-                            .orElse(null));
+                    direction != null
+                            ? Direction.valueOf(direction.toUpperCase())
+                            : null);
 
         } else if (datatype != null) {
             objectValue = terms.createLiteral(object, datatype);
 
         } else {
-            objectValue = getNode(object);
+            objectValue = terms.createResource(object);
         }
 
-        quad(getNode(subject),
+        quad(terms.createResource(subject),
                 predicate,
                 objectValue,
-                Optional.ofNullable(graph)
-                        .map(this::getNode)
-                        .orElse(null));
+                graph != null
+                        ? terms.createResource(graph)
+                        : null);
 
         return this;
     }
 
-    public RdfTermFactory terms() {
+    public RdfTerm.Factory terms() {
         return terms;
-    }
-
-    public void blankNodeIssuer(Function<String, String> blankNodeIssuer) {
-        this.blankNodeIssuer = Objects.requireNonNull(blankNodeIssuer);
-    }
-
-    protected final RdfResource getNode(final String id) {
-        if (RdfQuadConsumer.isBlank(id)) {
-            return terms.createVariable(blankNodeIssuer.apply(id.substring(2)));
-        }
-        return terms.createResource(id);
     }
 }
