@@ -2,12 +2,10 @@ package com.apicatalog.rdf.provider;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.apicatalog.rdf.api.RdfQuadConsumer;
-import com.apicatalog.rdf.model.RdfLiteral.Direction;
 import com.apicatalog.rdf.model.RdfTerm;
 import com.apicatalog.rdf.primitive.Node;
 import com.apicatalog.rdf.primitive.TermMap;
@@ -61,24 +59,24 @@ class NodeMapProvider implements RdfQuadConsumer, Supplier<Map<String, Node>> {
             String direction,
             String graph) {
 
-        final RdfTerm objectValue;
-
-        if (language != null || direction != null) {
-            objectValue = terms.createLangString(
-                    object,
-                    datatype,
-                    language,
-                    Optional.ofNullable(direction)
-                            .map(String::toUpperCase)
-                            .map(Direction::valueOf)
-                            .orElse(null));
-
-        } else if (datatype != null) {
-            objectValue = terms.createLiteral(object, datatype);
-
-        } else {
-            objectValue = terms.createResource(object);
-        }
+//        final RdfTerm objectValue;
+//
+//        if (language != null || direction != null) {
+//            objectValue = terms.createLangString(
+//                    object,
+//                    datatype,
+//                    language,
+//                    Optional.ofNullable(direction)
+//                            .map(String::toUpperCase)
+//                            .map(Direction::valueOf)
+//                            .orElse(null));
+//
+//        } else if (datatype != null) {
+//            objectValue = terms.createLiteral(object, datatype);
+//
+//        } else {
+//            objectValue = terms.createResource(object);
+//        }
 
 //        quad(getNode(subject),
 //                predicate,
