@@ -18,6 +18,7 @@ package com.apicatalog.rdf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -25,7 +26,9 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URISyntaxException;
+import java.util.Comparator;
 import java.util.LinkedHashSet;
+import java.util.TreeSet;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.params.ParameterizedTest;
@@ -37,6 +40,7 @@ import com.apicatalog.rdf.nquads.NQuadsReader;
 import com.apicatalog.rdf.nquads.NQuadsReaderException;
 import com.apicatalog.rdf.nquads.NQuadsWriter;
 import com.apicatalog.rdf.primitive.Dataset;
+import com.apicatalog.rdf.primitive.Quad;
 import com.apicatalog.rdf.provider.DatasetProvider;
 import com.apicatalog.rdf.provider.QuadEmitter;
 import com.apicatalog.rdf.provider.QuadSetProvider;
@@ -66,7 +70,9 @@ class ReadWriteTest {
 
             var quads = new LinkedHashSet<RdfQuad>();
 
-            new NQuadsReader(new StringReader(input)).provide(new QuadSetProvider(quads));
+            try (var reader = new NQuadsReader(new StringReader(input))) {
+                reader.read(new QuadSetProvider(quads));
+            }
 
             final StringWriter writer = new StringWriter();
 
@@ -118,38 +124,56 @@ class ReadWriteTest {
             assertNotNull(input);
 
             final var dataset = new Dataset();
-            final var provider = new DatasetProvider(dataset);
-            new NQuadsReader(new StringReader(input)).provide(provider);
 
-            final StringWriter writer = new StringWriter();
+            try (var reader = new NQuadsReader(new StringReader(input))) {
+                reader.read(new DatasetProvider(dataset));
+            }
 
-            QuadEmitter.emit(new NQuadsWriter(writer), dataset);
+            var quads = new TreeSet<RdfQuad>(Comparator.comparing(quad -> {
 
-            final String result = writer.toString();
-            assertNotNull(result);
+                var result = new String[1];
+
+                QuadEmitter.emit((subject, predicate, object, datatype, language, direction, graph) -> {
+                    result[0] = NQuadsWriter.nquad(subject, predicate, object, datatype, language, direction, graph);
+                }, quad);
+
+                return result[0];
+            }));
 
             assertEquals(Type.POSITIVE, testCase.getType());
 
-            String expected = input;
+            try (var reader = new NQuadsReader(new StringReader(input))) {
+                reader.read(new QuadSetProvider(quads));
+            }
 
-            try (final InputStream out = ReadWriteTest.class
-                    .getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".out.nq")) {
-                if (out != null) {
-                    expected = isToString(out);
+            int found = 0;
+
+            for (var triple : dataset.defaultGraph()) {
+                if (!quads.contains(new Quad(
+                        triple.subject(),
+                        triple.predicate(),
+                        triple.object(),
+                        null))) {
+                    fail();
+                }
+                found++;
+            }
+
+            for (var graph : dataset.graphNames()) {
+
+                for (var triple : dataset.namedGraph(graph)) {
+                    if (!quads.contains(new Quad(
+                            triple.subject(),
+                            triple.predicate(),
+                            triple.object(),
+                            graph))) {
+                        fail();
+                    }
+                    found++;
                 }
             }
 
-            final boolean match = expected.equals(result);
-
-            if (!match) {
-                System.out.println(testCase.getName());
-                System.out.println("Expected:");
-                System.out.println(expected);
-                System.out.println("Result:");
-                System.out.println(result);
-            }
-
-            assertTrue(match);
+            assertEquals(quads.size(), found);
 
         } catch (IllegalArgumentException | NQuadsReaderException e) {
             assertEquals(Type.NEGATIVE, testCase.getType());

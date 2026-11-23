@@ -57,10 +57,10 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <argLine>-Dfile.encoding=UTF-8</argLine>
 
-        <rdf.api.version>2.0.1</rdf.api.version>
+        <rdf.api.version>2.1.1</rdf.api.version>
 
         <!--  test resources -->
-        <nquads.version>2.0.1</nquads.version>
+        <nquads.version>2.2.0</nquads.version>
         <jakarta.json.version>2.0.1</jakarta.json.version>
         <junit.version>6.1.3</junit.version>
     </properties>

@@ -12,7 +12,7 @@ import com.apicatalog.rdf.model.RdfTerm;
 import com.apicatalog.rdf.primitive.Node;
 import com.apicatalog.rdf.primitive.TermMap;
 
-public class NodeMapProvider implements RdfQuadConsumer, Supplier<Map<String, Node>> {
+class NodeMapProvider implements RdfQuadConsumer, Supplier<Map<String, Node>> {
 
     protected final RdfTerm.Factory terms;
     protected final Map<String, Node> nodes;
