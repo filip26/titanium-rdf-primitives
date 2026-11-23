@@ -15,7 +15,6 @@
  */
 package com.apicatalog.rdf.model;
 
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -23,7 +22,8 @@ import java.util.Set;
  * <p>
  * An RDF Dataset is a collection of RDF graphs. It includes:
  * <ul>
- * <li>A single default graph (unnamed graph)</li>
+ * <li>Exactly one default graph, the default graph does not have a name and may
+ * be <code>null</code></li>
  * <li>Zero or more named graphs, each identified by an IRI or a blank node</li>
  * </ul>
  * <p>
@@ -33,7 +33,7 @@ import java.util.Set;
  * <p>
  * Implementations may or may not support modifications to the dataset.
  *
- * @see <a href="https://www.w3.org/TR/rdf11-concepts/#datasets">RDF 1.1
+ * @see <a href="https://www.w3.org/TR/rdf12-concepts/#section-dataset">RDF
  *      Dataset</a>
  * @see RdfGraph
  */
@@ -45,34 +45,31 @@ public interface RdfDataset {
      * The default graph is the unnamed graph in the dataset. It contains RDF
      * triples that are not part of any named graph.
      *
-     * @return the {@link RdfGraph} representing the default graph; never
-     *         {@code null}
+     * @return an immutable set of {@link RdfTriple} representing the default graph;
+     *         or {@code null}
      */
-    RdfGraph defaultGraph();
+    Set<RdfTriple> defaultGraph();
 
     /**
      * Returns the set of graph names for all named graphs in the dataset.
      * <p>
-     * Each name is represented as a {@link RdfResource}, which can be an IRI or a
-     * blank node identifier.
+     * Each name is represented as an IRI or a blank node identifier.
      *
-     * @return an immutable {@link Set} of {@link RdfResource} graph names; empty if
-     *         no named graphs are present.
+     * @return an immutable set of graph names; empty if no named graphs are
+     *         present.
      */
     Set<RdfResource> graphNames();
 
     /**
      * Returns the named graph corresponding to the provided graph name.
      * <p>
-     * If the dataset does not contain a named graph with the specified name, an
-     * empty {@link Optional} is returned.
+     * If the dataset does not contain a named graph with the specified name, otherwise, {@code null}
      *
-     * @param graphName the {@link RdfResource} identifying the named graph
-     * @return an {@link Optional} containing the {@link RdfGraph} if present;
-     *         otherwise, {@link Optional#empty()}
-     * @throws NullPointerException if {@code graphName} is {@code null}
+     * @param graphName the URI or blank node id identifying the named graph
+     * @return an immutable {@link Set} containing the {@link RdfTriple} if present;
+     *         otherwise, {@code null}
      */
-    Optional<RdfGraph> namedGraph(RdfResource graphName);
+    Set<RdfTriple> namedGraph(RdfResource graphName);
 
     /**
      * Replaces the default graph in the dataset with the specified graph.
@@ -81,12 +78,10 @@ public interface RdfDataset {
      * {@link UnsupportedOperationException}. Implementations that support
      * modification of the dataset should override this method.
      *
-     * @param graph the {@link RdfGraph} to be set as the new default graph
-     * @return the updated {@link RdfDataset} instance
+     * @param graph the set of triples to be set as the new default graph
      * @throws UnsupportedOperationException if modification is not supported
-     * @throws NullPointerException          if {@code graph} is {@code null}
      */
-    default RdfDataset defaultGraph(RdfGraph graph) {
+    default void defaultGraph(Set<RdfTriple> graph) {
         throw new UnsupportedOperationException();
     }
 
@@ -102,13 +97,16 @@ public interface RdfDataset {
      * modification of the dataset should override this method.
      *
      * @param graphName the {@link RdfResource} identifying the named graph
-     * @param graph     the {@link RdfGraph} to associate with the specified name
-     * @return the updated {@link RdfDataset} instance
+     * @param graph     the graph to associate with the specified name
      * @throws UnsupportedOperationException if modification is not supported
      * @throws NullPointerException          if {@code graphName} or {@code graph}
      *                                       is {@code null}
      */
-    default RdfDataset namedGraph(RdfResource graphName, RdfGraph graph) {
+    default void namedGraph(RdfResource graphName, Set<RdfTriple> graph) {
+        throw new UnsupportedOperationException();
+    }
+
+    default void add(RdfResource graph, RdfTriple triple) {
         throw new UnsupportedOperationException();
     }
 }

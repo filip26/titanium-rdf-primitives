@@ -15,8 +15,6 @@
  */
 package com.apicatalog.rdf.model;
 
-import java.util.Optional;
-
 /**
  * Represents an immutable N-Quad statement in the RDF data model.
  * <p>
@@ -31,13 +29,10 @@ public interface RdfQuad extends RdfTriple {
     /**
      * Returns the optional graph name for this N-Quad statement.
      * <p>
-     * If the N-Quad is part of a named graph, this method returns an
-     * {@link Optional} containing the graph name. Otherwise, it returns
-     * {@link Optional#empty()} if no graph name is specified.
+     * If the N-Quad is part of a named graph, this method returns the graph name.
+     * Otherwise, it returns <code>null</code> if no graph name is specified.
      *
-     * @return an {@link Optional} containing the graph name if present, or
-     *         {@link Optional#empty()} if not set
+     * @return the graph if present, or <code>null</code> if not set
      */
-    Optional<RdfResource> graphName();
-
+    RdfResource graph();
 }

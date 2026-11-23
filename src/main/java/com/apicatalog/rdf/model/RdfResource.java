@@ -16,51 +16,30 @@
 package com.apicatalog.rdf.model;
 
 /**
- * Represents an RDF resource, which can either be an absolute IRI or a blank
+ * Represents an RDF resource, which can either be an absolute URI or a blank
  * node identifier.
  * <p>
  * This interface defines methods for working with RDF resources, which are key
  * components in RDF statements (subject, predicate, or object in RDF triples).
- * An RDF resource can either be an IRI or a blank node.
+ * An RDF resource can either be an URI or a blank node.
  */
 public interface RdfResource extends RdfTerm {
 
     /**
-     * Returns the value of the resource, typically an absolute IRI or blank node
-     * identifier.
+     * Returns the id of the resource, typically an absolute URI or blank node
+     * identifier stripped of <code>"_:"</code> prefix.
      * 
-     * @return the value of the resource as a {@link String}
+     * @return the id of the resource as a {@link String}, never <code>null</code>
      */
-    String value();
+    String id();
 
     /**
-     * Checks whether this resource is a blank node.
+     * Checks whether this resource is a variable, i.e. blank node.
      * <p>
-     * A blank node is an anonymous resource that does not have an IRI.
+     * A blank node is an anonymous resource that does not have an absolute URI.
      * 
      * @return {@code true} if this resource is a blank node, {@code false} if it is
-     *         an IRI
+     *         an URI
      */
-    boolean isBlank();
-
-    /**
-     * Checks whether this resource is an IRI.
-     * <p>
-     * An IRI (Internationalized Resource Identifier) is a globally unique
-     * identifier used to refer to a resource.
-     * 
-     * @return {@code true} if this resource is an IRI, {@code false} if it is a
-     *         blank node
-     */
-    boolean isIRI();
-
-    @Override
-    default boolean isResource() {
-        return true;
-    }
-
-    @Override
-    default RdfResource asResource() {
-        return this;
-    }
+    boolean isBlankNode();
 }

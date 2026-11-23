@@ -31,11 +31,10 @@ package com.apicatalog.rdf.model;
  * </ul>
  * <p>
  * This interface extends {@link RdfTerm} and provides methods to access each
- * component of the triple. It also identifies itself as an RDF triple via the
- * {@link #isTriple()} method.
+ * component of the triple.
  * <p>
- * Experimental support for RDF-star (RDF 1.2) allows the object of a triple to
- * be another {@link RdfTriple}.
+ * Experimental support for RDF 1.2 allows the object of a triple to be another
+ * {@link RdfTriple}.
  *
  * @see <a href="https://www.w3.org/TR/rdf11-concepts/#dfn-rdf-triple">RDF 1.1
  *      Triple</a>
@@ -59,10 +58,9 @@ public interface RdfTriple extends RdfTerm {
      * The predicate is an absolute IRI that specifies the property or relationship
      * between the subject and the object of the triple.
      *
-     * @return a {@link RdfResource} representing the predicate of the triple; never
-     *         {@code null}
+     * @return an URI representing the predicate of the triple; never {@code null}
      */
-    RdfResource predicate();
+    String predicate();
 
     /**
      * Returns the object of the triple.
@@ -78,14 +76,4 @@ public interface RdfTriple extends RdfTerm {
      *         {@code null}
      */
     RdfTerm object();
-
-    @Override
-    default boolean isTriple() {
-        return true;
-    }
-
-    @Override
-    default RdfTriple asTriple() {
-        return this;
-    }
 }

@@ -15,73 +15,20 @@
  */
 package com.apicatalog.rdf.primitive;
 
-import java.util.Objects;
-import java.util.Optional;
-
 import com.apicatalog.rdf.model.RdfLiteral;
 
-public class Literal implements RdfLiteral {
+public record Literal(
+        String lexicalValue,
+        String datatype) implements RdfLiteral {
 
-    final String lexicalValue;
-    final String datatype;
-
-    Literal(String lexicalValue, String datatype) {
-        this.lexicalValue = lexicalValue;
-        this.datatype = datatype;
-    }
-
-    public static Literal of(String lexicalValue, String datatype) {
-        return new Literal(lexicalValue, datatype);
+    @Override
+    public String language() {
+        return null;
     }
 
     @Override
-    public String lexicalValue() {
-        return lexicalValue;
-    }
-
-    @Override
-    public String datatype() {
-        return datatype;
-    }
-
-    @Override
-    public Optional<String> language() {
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<Direction> direction() {
-        return Optional.empty();
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(lexicalValue, datatype);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() == obj.getClass()) {
-            Literal other = (Literal) obj;
-            return Objects.equals(lexicalValue, other.lexicalValue)
-                    && Objects.equals(datatype, other.datatype)
-                    && !other.language().isPresent()
-                    && !other.direction().isPresent();
-        }
-        if (!(obj instanceof RdfLiteral)) {
-            return false;
-        }
-        RdfLiteral other = (RdfLiteral) obj;
-        return Objects.equals(lexicalValue, other.lexicalValue())
-                && Objects.equals(datatype, other.datatype())
-                && !other.language().isPresent()
-                && !other.direction().isPresent();
+    public Direction direction() {
+        return null;
     }
 
     @Override

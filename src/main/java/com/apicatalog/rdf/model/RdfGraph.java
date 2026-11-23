@@ -28,7 +28,7 @@ import java.util.stream.Stream;
  * these operations are unsupported by default), and streaming over the graph's
  * triples.
  */
-public interface RdfGraph {
+public interface RdfGraph extends RdfResource {
 
     /**
      * Checks if the RDF graph contains the specified triple.

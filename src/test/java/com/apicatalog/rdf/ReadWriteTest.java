@@ -18,6 +18,7 @@ package com.apicatalog.rdf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -25,22 +26,24 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URISyntaxException;
+import java.util.Comparator;
+import java.util.LinkedHashSet;
+import java.util.TreeSet;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import com.apicatalog.rdf.NQuadsTestCase.Type;
-import com.apicatalog.rdf.api.RdfConsumerException;
-import com.apicatalog.rdf.model.RdfDataset;
-import com.apicatalog.rdf.model.RdfQuadSet;
+import com.apicatalog.rdf.model.RdfQuad;
 import com.apicatalog.rdf.nquads.NQuadsReader;
 import com.apicatalog.rdf.nquads.NQuadsReaderException;
 import com.apicatalog.rdf.nquads.NQuadsWriter;
-import com.apicatalog.rdf.primitive.flow.QuadAcceptor;
-import com.apicatalog.rdf.primitive.flow.QuadEmitter;
-import com.apicatalog.rdf.primitive.set.OrderedQuadDataset;
-import com.apicatalog.rdf.primitive.set.OrderedQuadSet;
+import com.apicatalog.rdf.primitive.Dataset;
+import com.apicatalog.rdf.primitive.Quad;
+import com.apicatalog.rdf.provider.DatasetProvider;
+import com.apicatalog.rdf.provider.QuadEmitter;
+import com.apicatalog.rdf.provider.QuadSetProvider;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
@@ -59,21 +62,21 @@ class ReadWriteTest {
         assertNotNull(testCase.getName());
         assertNotNull(testCase.getType());
 
-        try (final InputStream is = ReadWriteTest.class.getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".nq")) {
+        try (final InputStream is = ReadWriteTest.class
+                .getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".nq")) {
 
             final String input = isToString(is);
             assertNotNull(input);
 
-            final QuadAcceptor datasetProvider = new QuadAcceptor(new OrderedQuadSet());
-            new NQuadsReader(new StringReader(input)).provide(datasetProvider);
+            var quads = new LinkedHashSet<RdfQuad>();
 
-            final RdfQuadSet dataset = datasetProvider.get();
-
-            assertNotNull(dataset);
+            try (var reader = new NQuadsReader(new StringReader(input))) {
+                reader.read(new QuadSetProvider(quads));
+            }
 
             final StringWriter writer = new StringWriter();
 
-            QuadEmitter.emit(new NQuadsWriter(writer), dataset);
+            QuadEmitter.emit(new NQuadsWriter(writer), quads);
 
             final String result = writer.toString();
             assertNotNull(result);
@@ -82,7 +85,8 @@ class ReadWriteTest {
 
             String expected = input;
 
-            try (final InputStream out = ReadWriteTest.class.getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".out.nq")) {
+            try (final InputStream out = ReadWriteTest.class
+                    .getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".out.nq")) {
                 if (out != null) {
                     expected = isToString(out);
                 }
@@ -100,7 +104,7 @@ class ReadWriteTest {
 
             assertTrue(match);
 
-        } catch (IllegalArgumentException | NQuadsReaderException | RdfConsumerException e) {
+        } catch (IllegalArgumentException | NQuadsReaderException e) {
             assertEquals(Type.NEGATIVE, testCase.getType());
         }
     }
@@ -113,50 +117,69 @@ class ReadWriteTest {
         assertNotNull(testCase.getName());
         assertNotNull(testCase.getType());
 
-        try (final InputStream is = ReadWriteTest.class.getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".nq")) {
+        try (final InputStream is = ReadWriteTest.class
+                .getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".nq")) {
 
             final String input = isToString(is);
             assertNotNull(input);
 
-            final OrderedQuadDataset dataset = new OrderedQuadDataset();
-            final QuadAcceptor datasetProvider = new QuadAcceptor(dataset);
-            new NQuadsReader(new StringReader(input)).provide(datasetProvider);
+            final var dataset = new Dataset();
 
-            assertNotNull(dataset);
+            try (var reader = new NQuadsReader(new StringReader(input))) {
+                reader.read(new DatasetProvider(dataset));
+            }
 
-            final StringWriter writer = new StringWriter();
+            var quads = new TreeSet<RdfQuad>(Comparator.comparing(quad -> {
 
-            QuadEmitter.emit(new NQuadsWriter(writer), (RdfDataset)dataset);
+                var result = new String[1];
 
-            final String result = writer.toString();
-            assertNotNull(result);
+                QuadEmitter.emit((subject, predicate, object, datatype, language, direction, graph) -> {
+                    result[0] = NQuadsWriter.nquad(subject, predicate, object, datatype, language, direction, graph);
+                }, quad);
+
+                return result[0];
+            }));
 
             assertEquals(Type.POSITIVE, testCase.getType());
 
-            String expected = input;
+            try (var reader = new NQuadsReader(new StringReader(input))) {
+                reader.read(new QuadSetProvider(quads));
+            }
 
-            try (final InputStream out = ReadWriteTest.class.getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".out.nq")) {
-                if (out != null) {
-                    expected = isToString(out);
+            int found = 0;
+
+            for (var triple : dataset.defaultGraph()) {
+                if (!quads.contains(new Quad(
+                        triple.subject(),
+                        triple.predicate(),
+                        triple.object(),
+                        null))) {
+                    fail();
+                }
+                found++;
+            }
+
+            for (var graph : dataset.graphNames()) {
+
+                for (var triple : dataset.namedGraph(graph)) {
+                    if (!quads.contains(new Quad(
+                            triple.subject(),
+                            triple.predicate(),
+                            triple.object(),
+                            graph))) {
+                        fail();
+                    }
+                    found++;
                 }
             }
 
-            final boolean match = expected.equals(result);
+            assertEquals(quads.size(), found);
 
-            if (!match) {
-                System.out.println(testCase.getName());
-                System.out.println("Expected:");
-                System.out.println(expected);
-                System.out.println("Result:");
-                System.out.println(result);
-            }
-
-            assertTrue(match);
-
-        } catch (IllegalArgumentException | NQuadsReaderException | RdfConsumerException e) {
+        } catch (IllegalArgumentException | NQuadsReaderException e) {
             assertEquals(Type.NEGATIVE, testCase.getType());
         }
     }
+
     static final Stream<NQuadsTestCase> data() throws IOException {
         return load(TEST_CASE_BASE_PATH, "manifest.json");
     }
